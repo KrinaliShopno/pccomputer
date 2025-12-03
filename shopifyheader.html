@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>PC Builder Studio — Demo (multi-select + synced icons)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="<?= base_url('assets/');?>Style.css" />
+</head>
+
+<body>
+
+    <header class="techouse-header">
+        <!-- Logo -->
+        <a href="https://techousecomputers.myshopify.com/" class="techouse-logo">
+            <img src="<?= base_url('assets/');?>images/Techouse_300x.png" alt="Techouse Logo">
+            <!-- <span>techouse <span class="brand-accent">computers</span></span> -->
+        </a>
+
+        <!-- Desktop Menu -->
+        <nav class="techouse-center">
+            <ul class="techouse-menu">
+                <li class="menu-item">
+                    <button class="menu-dropdown-toggle">All Categories ▾</button>
+                    <div class="submenu">
+                        <a href="https://techousecomputers.myshopify.com/">Home</a>
+                        <a href="https://techousecomputers.myshopify.com/pages/pc-builder-studio">PC Builder Studio</a>
+                        <a href="https://techousecomputers.myshopify.com/collections/all">Catalog</a>
+                        <a href="https://techousecomputers.myshopify.com/pages/contact">Contact</a>
+                    </div>
+                </li>
+                <li><a href="https://techousecomputers.myshopify.com/collections/prebuilt-pcs">Prebuilt PCs</a></li>
+                <li><a href="https://techousecomputers.myshopify.com/collections/components">Components</a></li>
+                <li><a href="https://techousecomputers.myshopify.com/collections/peripherals">Peripherals</a></li>
+                <li><a href="https://techousecomputers.myshopify.com/collections/gaming-gear">Gaming Gear</a></li>
+            </ul>
+        </nav>
+
+        <!-- Right -->
+        <div class="techouse-right">
+            <a href="#" class="icon-btn1"><i class="fa-solid fa-magnifying-glass"></i></a>
+            <a href="#" class="icon-btn1"><i class="fa-regular fa-user"></i>
+                <div>Login</div>
+            </a>
+            <a href="#" class="icon-btn1 cart-btn">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count">1</span>
+            </a>
+            <div class="hamburger" id="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Sidebar -->
+    <aside class="mobile-sidebar">
+        <nav class="mobile-nav">
+            <ul>
+                <li>
+                    <button class="mobile-toggle">All Categories ▾</button>
+                    <ul class="mobile-submenu">
+                        <li><a href="#">All Products</a></li>
+                        <li><a href="#">Components</a></li>
+                        <li><a href="#">Peripherals</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Prebuilt PCs</a></li>
+                <li><a href="#">Components</a></li>
+                <li><a href="#">Peripherals</a></li>
+                <li><a href="#">Gaming Gear</a></li>
+                <li><a href="#">Login</a></li>
+                <li><a href="#">Compare</a></li>
+                <li><a href="#">Cart (1)</a></li>
+            </ul>
+        </nav>
+    </aside>

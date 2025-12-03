@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Techouse Header</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Inter, Arial, sans-serif; background: #f5f5f5; }
+
+    /* Header */
+    .techouse-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 22px;
+      background: #000;
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    /* Logo */
+    .techouse-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .techouse-logo img { height: 40px; }
+    .brand-accent { color: #a855f7; }
+
+    /* Center Menu */
+    .techouse-center { flex: 1; display: flex; justify-content: center; }
+    .techouse-menu {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .techouse-menu li { position: relative; }
+    .techouse-menu a, .menu-dropdown-toggle {
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      padding: 6px 8px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .techouse-menu a:hover, .menu-dropdown-toggle:hover { color: #a855f7; }
+
+    /* Dropdown */
+    .submenu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #111;
+      min-width: 200px;
+      border-radius: 6px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      flex-direction: column;
+    }
+    .submenu a {
+      padding: 10px;
+      font-size: 13px;
+      color: #ddd;
+      display: block;
+    }
+    .submenu a:hover { background: #222; color: #a855f7; }
+    .menu-item:hover .submenu { display: flex; }
+
+    /* Right Icons */
+    .techouse-right { display: flex; align-items: center; gap: 18px; }
+    .icon-btn {
+      color: #fff;
+      display: flex;
+      font-size: 16px;
+      gap:8px;
+      text-decoration: none;
+      position: relative;
+    }
+    .icon-btn:hover { color: #a855f7; }
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: #a855f7;
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 50%;
+    }
+
+    /* Hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 4px; cursor: pointer; }
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      transition: all 0.3s ease;
+    }
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* Mobile Sidebar */
+    .mobile-sidebar {
+      position: fixed;
+      top: 0;
+      left: -280px;
+      width: 250px;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      z-index: 1200;
+      padding: 20px;
+      transition: left 0.3s ease-in-out;
+    }
+    body.mobile-open .mobile-sidebar { left: 0; }
+
+    .mobile-nav ul { list-style: none; }
+    .mobile-nav a, .mobile-toggle {
+      display: block;
+      padding: 14px;
+      color: #b9abab;
+      text-decoration: none;
+    }
+    .mobile-nav a:hover, .mobile-toggle:hover { color: #a855f7; }
+    .mobile-submenu { display: none; }
+    .mobile-submenu a { padding-left: 28px; font-size: 14px; }
+
+    /* Overlay */
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1100;
+      display: none;
+    }
+    body.mobile-open .mobile-overlay { display: block; }
+
+    /* Responsive */
+    @media(max-width: 1024px) {
+      .techouse-center { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width:375px) {
+        .techouse-logo img {
+    height: 25px;
+}
+.techouse-header {
+    display: flex
+;
+    align-items: center;
+    justify-content: space-between;
+    padding: 17px 10px;
+    background: #000;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+    }
+  </style>
+</head>
+<body>
+
+<header class="techouse-header">
+  <!-- Logo -->
+  <a href="#" class="techouse-logo">
+    <img src="images/Techouse_300x.png" alt="Techouse Logo">
+    <!-- <span>techouse <span class="brand-accent">computers</span></span> -->
+  </a>
+
+  <!-- Desktop Menu -->
+  <nav class="techouse-center">
+    <ul class="techouse-menu">
+      <li class="menu-item">
+        <button class="menu-dropdown-toggle">All Categories ▾</button>
+        <div class="submenu">
+          <a href="#">All Products</a>
+          <a href="#">Components</a>
+          <a href="#">Peripherals</a>
+        </div>
+      </li>
+      <li><a href="#">Prebuilt PCs</a></li>
+      <li><a href="#">Components</a></li>
+      <li><a href="#">Peripherals</a></li>
+      <li><a href="#">Gaming Gear</a></li>
+    </ul>
+  </nav>
+
+  <!-- Right -->
+  <div class="techouse-right">
+    <a href="#" class="icon-btn"><i class="fa-solid fa-magnifying-glass"></i></a>
+    <a href="#" class="icon-btn "><i class="fa-regular fa-user"></i><div>Login</div></a>
+    <a href="#" class="icon-btn cart-btn">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span class="cart-count">1</span>
+    </a>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Sidebar -->
+<aside class="mobile-sidebar">
+  <nav class="mobile-nav">
+    <ul>
+      <li>
+        <button class="mobile-toggle">All Categories ▾</button>
+        <ul class="mobile-submenu">
+          <li><a href="#">All Products</a></li>
+          <li><a href="#">Components</a></li>
+          <li><a href="#">Peripherals</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Prebuilt PCs</a></li>
+      <li><a href="#">Components</a></li>
+      <li><a href="#">Peripherals</a></li>
+      <li><a href="#">Gaming Gear</a></li>
+      <li><a href="#">Login</a></li>
+      <li><a href="#">Compare</a></li>
+      <li><a href="#">Cart (1)</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<!-- Overlay -->
+<div class="mobile-overlay"></div>
+
+<script>
+  const hamb = document.getElementById('hamburger');
+  const overlay = document.querySelector('.mobile-overlay');
+  const mobileToggle = document.querySelector('.mobile-toggle');
+
+  function openMenu() {
+    document.body.classList.add('mobile-open');
+    hamb.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    document.body.classList.remove('mobile-open');
+    hamb.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  hamb.addEventListener('click', () => {
+    if (document.body.classList.contains('mobile-open')) { closeMenu(); }
+    else { openMenu(); }
+  });
+  overlay.addEventListener('click', closeMenu);
+
+  // Mobile submenu toggle
+  if (mobileToggle) {
+    mobileToggle.addEventListener('click', function() {
+      const submenu = this.nextElementSibling;
+      submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+    });
+  }
+</script>
+
+</body>
+</html>

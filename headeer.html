@@ -1,0 +1,1353 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+  integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+<link rel="stylesheet" href="fontawesome-free-7.1.0-web/css/all.min.css">
+
+ <link rel="stylesheet" href="<?= base_url('assets/');?>Style.css" />
+
+  <title>PC Builder Studio — Demo (multi-select + synced icons)</title>
+  <style>
+    /* === Fonts / base === */
+    :root {
+      --accent-1: #a855f7;
+      --accent-3: #6366f1;
+      --bg-1: #000;
+      --panel: #07090b;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      background: #fff;
+      color: #111
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    button {
+      font-family: inherit
+    }
+
+    /* === Header container === */
+    .techouse-header-section {
+      color: #fff;
+    }
+
+    .techouse-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 50px;
+      background: var(--bg-1);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1200;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    /* left logo */
+    .techouse-left {
+      display: flex;
+      align-items: center;
+      min-width: 180px;
+    }
+
+    .techouse-logo img {
+      height: 50px;
+      display: block;
+    }
+   
+    .techouse-logo-placeholder {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: #fff;
+      text-transform: lowercase;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    @media (max-width:425px) {
+      .techouse-logo img {
+    height: 35px;
+        display: block;
+        width: 130px;
+}
+    }
+    .brand-accent {
+      color: var(--accent-1);
+      margin-left: 4px;
+      font-weight: 600;
+      text-transform: none;
+    }
+
+    /* center nav */
+    .techouse-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .techouse-menu {
+      display: flex;
+      gap: 18px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+    }
+
+    .menu-item {
+      position: relative;
+    }
+
+    .menu-link,
+    .menu-dropdown-toggle {
+      color: #fff;
+      background: none;
+      border: none;
+      padding: 10px 6px;
+      font-size: 15px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .menu-link:hover,
+    .menu-dropdown-toggle:hover {
+      color: var(--accent-1);
+    }
+
+    .menu-link.active {
+      color: var(--accent-1);
+    }
+
+    /* icons / right */
+    .techouse-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 220px;
+    justify-content: flex-end;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      /* padding: 8px; */
+      cursor: pointer;
+      border-radius: 6px;
+      transition: box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .icon-btn:hover {
+      box-shadow: 0 6px 18px rgba(168, 85, 247, 0.08);
+      color: var(--accent-1);
+      transform: translateY(-2px);
+    }
+
+    /* login */
+    .login-btn {
+      display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #7e22ce, #a855f7);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s 
+ease;
+    box-shadow: 0 6px 18px rgba(168, 85, 247, 0.25);
+    }
+
+    .login-btn:hover {
+      background: linear-gradient(135deg, #9333ea, #c084fc);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(168, 85, 247, 0.4)
+    }
+.login-btn svg {
+    transition: transform 0.3s 
+ease, stroke 0.3s 
+ease;
+}
+    .login-text {
+      font-size: 14px;
+      color: #fff;
+      letter-spacing: 0.3px;
+    }
+
+    /* search button and cart */
+    .search-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7e22ce, #a855f7);
+    transition: all 0.3s 
+ease;
+    box-shadow: 0 6px 18px rgba(168, 85, 247, 0.3);
+    border: none;
+    cursor: pointer;
+    }
+.search-btn svg {
+    transition: transform 0.3s 
+ease;
+}
+
+.cart-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7e22ce, #a855f7);
+    transition: all 0.3s 
+ease;
+    box-shadow: 0 6px 18px rgba(168, 85, 247, 0.3);
+}
+.cart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(168, 85, 247, 0.45);
+    background: linear-gradient(135deg, #9333ea, #c084fc);
+}
+    .search-btn:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #9333ea, #c084fc);
+      box-shadow: 0 8px 20px rgba(168, 85, 247, 0.45)
+    }
+
+    .cart-count {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 999px;
+      min-width: 18px;
+      line-height: 1.2;
+      text-align: center;
+      box-shadow: 0 3px 10px rgba(239, 68, 68, 0.3)
+    }
+
+    /* hamburger */
+.hamburger { display:none; background:transparent; border:none; padding:8px; cursor:pointer; }
+
+    .hamb-line {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: #fff;
+      margin: 4px 0;
+      border-radius: 2px;
+      transition: all 180ms ease;
+    }
+
+    /* mobile sidebar */
+   /* === MOBILE SIDEBAR === */
+  .mobile-sidebar { position:fixed; left:-360px; top:0; width:320px; bottom:0; background:#000; z-index:1300; 
+    /* box-shadow: 8px 0 40px rgba(0,0,0,0.6); */
+     padding:18px; overflow:auto; transition:left 300ms cubic-bezier(.2,.9,.2,1); }
+      .mobile-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+      .mobile-logo img { height:36px; }
+      .mobile-close { background:transparent; border:none; color:#fff; font-size:22px; cursor:pointer; }
+
+      .mobile-nav ul { list-style:none; padding:0; margin:0; }
+      .mobile-item { border-bottom:1px solid rgba(255,255,255,0.02); }
+      .mobile-item a, .mobile-item .mobile-toggle { display:block; padding:14px 10px; color:#fff; text-decoration:none; font-size:16px; width:100%; text-align:left; background:transparent; border:none; cursor:pointer; }
+      .mobile-item a:hover, .mobile-item .mobile-toggle:hover { color:#a855f7; background:rgba(168,85,247,0.02); }
+      .mobile-submenu { display:none; background:transparent; }
+      .mobile-submenu li a { padding-left:25px; font-size:14px; color:#d6e0ee; }
+
+      .mobile-cta a{ display:block; padding:12px 10px; color:#fff; text-decoration:none; }
+      .cart-count-mobile { background:#a855f7; color:#fff; padding:2px 8px; border-radius:999px; margin-left:8px; font-size:13px; }
+
+      .mobile-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1250; display:none; transition:opacity 200ms ease; }
+
+      /* Mobile active states (JavaScript toggles class) */
+      .mobile-open .mobile-sidebar { left:0; }
+      .mobile-open .mobile-overlay { display:block; opacity:1; }
+
+
+    /* === MEGA MENU (full-width) === */
+    .submenu {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 8px);
+      min-width: 650px;
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+      padding: 18px 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      transform: translateY(6px);
+      pointer-events: none;
+      transition: 150ms ease;
+      z-index: 2000
+    }
+
+    .menu-item-has-children:hover .submenu,
+    .menu-item-has-children:focus-within .submenu {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Ultra-premium full-width mega-submenu variant */
+    .mega-submenu {
+      position: absolute;
+      top: calc(100% + 16px);
+      left: 0;
+      width: 100%;
+      background: linear-gradient(135deg, rgba(18, 18, 28, 0.98), rgba(10, 10, 18, 0.96));
+      backdrop-filter: blur(18px);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.9);
+      padding: 5px 20px 20px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px) scale(.98);
+      transition: all .45s cubic-bezier(.25, 1, .3, 1);
+      z-index: 3000;
+    }
+
+    .menu-item-has-children:hover .mega-submenu {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .mega-fullwidth {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    .mega-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0 15px;
+    }
+
+    .mega-row.mega-row-second {
+      grid-template-columns: repeat(2, 1fr)
+    }
+
+    .mega-block {
+      transition: all .3s ease;
+      padding: 5px 0;
+      position: relative;
+    }
+
+    .mega-block::after {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      border-radius: 14px;
+      background: radial-gradient(circle at top left, rgba(168, 85, 247, 0.05), rgba(99, 102, 241, 0.02));
+      opacity: 0;
+      transition: opacity .3s ease;
+      z-index: -1
+    }
+
+    .mega-block:hover {
+      transform: translateY(-4px);
+    }
+
+    .mega-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      position: relative
+    }
+
+    .mega-heading svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      opacity: .9;
+      transition: transform .3s ease, opacity .3s ease
+    }
+
+    .mega-block:hover .mega-heading svg {
+      transform: scale(1.3) rotate(-5deg);
+      opacity: 1;
+      filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6))
+    }
+
+    .mega-heading::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent-1), var(--accent-3));
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.5)
+    }
+
+    .mega-block ul {
+      list-style: none;
+      margin: 0;
+      padding: 8px 0 0
+    }
+
+    .mega-block li {
+      margin: 0
+    }
+
+    .mega-block li a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #cfd6e4;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 6px 0;
+      transition: all .3s ease;
+      position: relative
+    }
+
+    .mega-block li a:hover {
+      color: var(--accent-1);
+      transform: translateX(6px)
+    }
+
+    .sub-icon {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      fill: #e5e5e5;
+      opacity: .85;
+      transition: all .25s ease;
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.05))
+    }
+
+    .mega-block li a:hover .sub-icon {
+      transform: scale(1.3) rotate(-8deg);
+      opacity: 1;
+      fill: var(--accent-1);
+      filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.6))
+    }
+
+    .mega-submenu::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 75%;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(168, 85, 247, 0.4), rgba(99, 102, 241, 0.4))
+    }
+
+    @keyframes fadeSlide {
+      0% {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .menu-item-has-children:hover .mega-row {
+      animation: fadeSlide .45s ease forwards
+    }
+
+    /* responsive */
+    @media (max-width:1300px) {
+      .mega-row {
+        grid-template-columns: repeat(3, 1fr)
+      }
+
+      .mega-submenu {
+        padding: 50px 60px
+      }
+    }
+     @media (max-width: 1024px) {
+        .techouse-center { display:none; }
+        .hamburger { display:inline-block; }
+        .techouse-right .login-text { display:none; }
+        .compare-link { display:none; }
+      }
+
+
+    @media (max-width:700px) {
+      .mega-row {
+        grid-template-columns: 1fr
+      }
+
+      .mega-submenu {
+        padding: 28px
+      }
+
+      .login-text {
+        display: none
+      }
+
+      .login-btn {
+        padding: 10px;
+        border-radius: 50%
+      }
+
+      .techouse-left {
+        min-width: 120px
+      }
+
+      .techouse-header {
+        padding: 10px 12px
+      }
+    }
+
+    /* mobile submenu enhancements */
+    .mobile-submenu {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 0;
+      margin: 0;
+      list-style: none
+    }
+
+    .mobile-sub .mobile-toggle {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 14px 12px;
+      cursor: pointer;
+      position: relative;
+      transition: all .2s ease
+    }
+
+    .mobile-sub .mobile-toggle::after {
+      content: "▾";
+      position: absolute;
+      right: 18px;
+      top: 14px;
+      font-size: 13px;
+      transition: transform .25s ease
+    }
+
+    .mobile-sub.open .mobile-toggle::after {
+      transform: rotate(-180deg)
+    }
+
+    .mobile-submenu-inner {
+      display: none;
+      background: rgba(0, 0, 0, 0.2);
+      padding-left: 20px
+    }
+
+    .mobile-submenu-inner a {
+      display: block;
+      padding: 10px 14px;
+      color: #d1d5db;
+      font-size: 14px;
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all .25s ease
+    }
+
+    .mobile-submenu-inner a:hover {
+      color: var(--accent-1);
+      border-left-color: var(--accent-1);
+      background: rgba(168, 85, 247, 0.05)
+    }
+
+    .mobile-sub.open .mobile-submenu-inner {
+      display: block
+    }
+
+    /* small helpers for demo (remove/adjust in production) */
+    .visually-hidden {
+      position: absolute !important;
+      height: 1px;
+      width: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px);
+      white-space: nowrap
+    }
+
+    .mobile-submenu-inner a i {
+  color: #ffffff;
+  width: 18px;
+  margin-right: 8px;
+}
+  </style>
+</head>
+
+<body>
+
+  <section id="techouse-header" class="techouse-header-section">
+    <div class="techouse-header">
+      <!-- left -->
+      <div class="techouse-left">
+        <a href="/images/Techouse_300x.png" class="techouse-logo" aria-label="Techouse Computers">
+          <!-- replace /assets/logo.png with your logo path -->
+          <img src="/images/Techouse_300x.png" alt="Techouse Computers"
+            onerror="this.src='https://via.placeholder.com/150x50?text=Techouse+Logo'">
+        </a>
+      </div>
+
+      <!-- center nav -->
+      <nav class="techouse-center" aria-label="Main Navigation">
+        <ul class="techouse-menu">
+          <!-- All Categories (mega) -->
+          <li class="menu-item menu-item-has-children">
+            <button class="menu-link menu-dropdown-toggle" aria-expanded="false">All Categories <span
+                class="arrow">▾</span></button>
+
+            <!-- MEGA MENU -->
+            <ul class="submenu mega-submenu" role="menu" aria-hidden="true">
+              <div class="mega-fullwidth">
+                <!-- Row 1 -->
+                <div class="mega-row">
+                  <!-- Processor -->
+                  <div class="mega-block">
+                    <h4 class="mega-heading">
+                      <!-- cpu svg -->
+                      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                        <path d="M9 9h6v6H9zM9 1v3M9 20v3M1 9h3M20 9h3M15 1v3M15 20v3M1 15h3M20 15h3"></path>
+                      </svg>
+                      Processor
+                    </h4>
+                    <ul>
+                      <li>
+                        <a href="/collections/amd-processor">
+                          <svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12l5 5L20 7"></path>
+                          </svg>
+                          AMD
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/collections/intel-processor">
+                         <svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                          Intel
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Memory -->
+                  <div class="mega-block">
+                    <h4 class="mega-heading">
+                      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="10" rx="2" ry="2"></rect>
+                        <path d="M6 7v10M18 7v10M2 12h20"></path>
+                      </svg> Memory (RAM)
+                    </h4>
+                    <ul>
+                      <li>
+                        <a href="/collections/ddr5">
+                          <svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="4" y="8" width="16" height="8" rx="2"></rect>
+                        </svg>
+                          DDR5
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/collections/ddr4">
+                         <svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="3" y="8" width="18" height="8" rx="2"></rect>
+                        </svg>
+                          DDR4
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/collections/laptop-ram">
+                  <svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M6 10h12v4H6z"></path>
+                        </svg>
+                          Laptop RAM
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Graphics -->
+                  <div class="mega-block">
+                    <h4 class="mega-heading">
+                      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg> Graphics Card
+                    </h4>
+                    <ul>
+                      <li>
+                        <a href="/collections/nvidia-gpu">
+                          <svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M5 12l7 7 7-7"></path>
+                        </svg>
+                          NVIDIA GPU
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/collections/amd-gpu">
+                       <svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M4 4l16 8-16 8z"></path>
+                        </svg>
+                          AMD GPU
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Motherboard -->
+                  <div class="mega-block">
+                    <h4 class="mega-heading">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2"></rect> <circle cx="12" cy="12" r="2"></circle> <path d="M12 8v4l3 3"></path>
+                    </svg>
+                      Motherboard
+                    </h4>
+                    <ul>
+                      <li><a href="/collections/amd-motherboard"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <circle cx="12" cy="12" r="4"></circle>
+                        </svg>AMD Motherboard</a></li>
+                      <li><a href="/collections/intel-motherboard"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+                        </svg>Intel Motherboard</a></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="mega-row">
+                  <!-- CPU Cooler -->
+                  <div class="mega-block">
+                    <h4 class="mega-heading"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="8"></circle> <path d="M12 4v2M12 18v2M4 12h2M18 12h2"></path>
+                    </svg>CPU Cooler</h4>
+                    <ul>
+                      <li><a href="/collections/liquid-cooler"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M4 10h16v4H4z"></path>
+                        </svg>Liquid Cooler</a></li>
+                      <li><a href="/collections/air-cooler"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg> Air Cooler</a></li>
+                      <li><a href="/collections/case-fans"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M12 2v20M2 12h20"></path>
+                        </svg>Case Fans</a></li>
+                    </ul>
+                  </div>
+
+                  <!-- Storage -->
+                  <div class="mega-block">
+                    <h4 class="mega-heading"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="5" width="18" height="14" rx="2"></rect> <path d="M8 21h8"></path>
+                    </svg>Storage</h4>
+                    <ul>
+                      <li><a href="/collections/hdd"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <circle cx="12" cy="12" r="4"></circle>
+                        </svg>HDD</a></li>
+                      <li><a href="/collections/ssd"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="5" y="8" width="14" height="8" rx="1"></rect>
+                        </svg>SSD</a></li>
+                      <li><a href="/collections/storage-others"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M4 4h16v16H4z"></path>
+                        </svg>Others</a></li>
+                    </ul>
+                  </div>
+
+                  <!-- Peripherals -->
+                  <div class="mega-block">
+                    <h4 class="mega-heading"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="8" width="20" height="8" rx="2"></rect>
+                    </svg>Peripherals</h4>
+                    <ul>
+                      <li><a href="/collections/keyboard"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="4" y="8" width="16" height="8" rx="2"></rect>
+                        </svg>Keyboard</a></li>
+                      <li><a href="/collections/mouse"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M12 2a6 6 0 0 1 6 6v8a6 6 0 0 1-12 0V8a6 6 0 0 1 6-6z"></path>
+                        </svg>Mouse</a></li>
+                      <li><a href="/collections/headset"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M4 12a8 8 0 0 1 16 0v4H4z"></path>
+                        </svg>Headset</a></li>
+                      <li><a href="/collections/speakers"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="8" y="5" width="8" height="14" rx="2"></rect>
+                        </svg>Speaker</a></li>
+                      <li><a href="/collections/gamepad"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M5 12h14v4H5z"></path>
+                        </svg>Gamepad</a></li>
+                    </ul>
+                  </div>
+
+                  <!-- Cabinet -->
+                  <div class="mega-block">
+                    <h4 class="mega-heading"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="6" y="3" width="12" height="18" rx="2"></rect>
+                    </svg>Cabinet</h4>
+                    <ul>
+                      <li><a href="/collections/full-tower"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="7" y="4" width="10" height="16" rx="2"></rect>
+                        </svg>Full Tower</a></li>
+                      <li><a href="/collections/mid-tower"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="8" y="6" width="8" height="12" rx="2"></rect>
+                        </svg>Mid Tower</a></li>
+                      <li><a href="/collections/mini-tower"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="9" y="8" width="6" height="8" rx="2"></rect>
+                        </svg>Mini Tower</a></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="mega-row">
+                  <div class="mega-block">
+                    <h4 class="mega-heading"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="7" width="18" height="10" rx="2"></rect> <path d="M8 21h8"></path>
+                    </svg>Power & Display</h4>
+                    <ul>
+                      <li><a href="/collections/power-supply"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <circle cx="12" cy="12" r="4"></circle>
+                        </svg>Power Supply</a></li>
+                      <li><a href="/collections/monitor"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="4" y="5" width="16" height="10" rx="2"></rect>
+                        </svg>Monitor</a></li>
+                      <li><a href="/collections/modular-cable"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M6 8h12v8H6z"></path>
+                        </svg>Modular Cable</a></li>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+            </ul>
+          </li>
+
+          <!-- Other top links -->
+          <li class="menu-item"><a href="/pages/pre-built-pcs" class="menu-link">Prebuilt PCs</a></li>
+
+          <!-- Components (mega) -->
+          <li class="menu-item menu-item-has-children">
+            <button class="menu-link menu-dropdown-toggle" aria-expanded="false">Components <span
+                class="arrow">▾</span></button>
+            <ul class="submenu mega-submenu" role="menu" aria-hidden="true">
+              <div class="mega-fullwidth">
+                <div class="mega-row mega-row-second">
+                  <div class="mega-block">
+                    <h4 class="mega-heading"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M12 6v6l4 2"></path>
+                    </svg>Core Components</h4>
+                    <ul>
+                      <li><a href="/collections/processors"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                        </svg>Processors (CPU)</a></li>
+                      <li><a href="/collections/graphics-cards"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <circle cx="12" cy="12" r="3"></circle><rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                        </svg>Graphics Cards</a></li>
+                      <li><a href="/collections/memory-ram"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="3" y="8" width="18" height="8" rx="2"></rect>
+                        </svg>Memory (RAM)</a></li>
+                      <li><a href="/collections/storage"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="4" y="6" width="16" height="12" rx="2"></rect>
+                        </svg>Storage</a></li>
+                    </ul>
+                  </div>
+
+                  <div class="mega-block">
+                    <h4 class="mega-heading"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 4h16v16H4z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>Support Components</h4>
+                    <ul>
+                      <li><a href="/collections/motherboards"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>Motherboards</a></li>
+                      <li><a href="/collections/power-supplies"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M12 2v20M2 12h20"></path>
+                        </svg>Power Supplies</a></li>
+                      <li><a href="/collections/cooling"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <circle cx="12" cy="12" r="8"></circle><path d="M12 4v2M12 18v2M4 12h2M18 12h2"></path>
+                        </svg>Cooling</a></li>
+                      <li><a href="/collections/cases"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="7" y="3" width="10" height="18" rx="2"></rect>
+                        </svg>Cases</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </ul>
+          </li>
+
+          <!-- Peripherals (mega) -->
+          <li class="menu-item menu-item-has-children">
+            <button class="menu-link menu-dropdown-toggle" aria-expanded="false">Peripherals <span
+                class="arrow">▾</span></button>
+            <ul class="submenu mega-submenu" role="menu" aria-hidden="true">
+              <div class="mega-fullwidth">
+                <div class="mega-row mega-row-second">
+                  <div class="mega-block">
+                    <h4 class="mega-heading"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                      <path d="M6 8h12M6 16h12M12 12h0"></path>
+                    </svg>Input Devices</h4>
+                    <ul>
+                      <li><a href="/collections/keyboards"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="3" y="6" width="18" height="12" rx="2"></rect>
+                        </svg>Keyboards</a></li>
+                      <li><a href="/collections/gaming-mice"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <circle cx="12" cy="12" r="8"></circle><path d="M12 8v4l2 2"></path>
+                        </svg>Gaming Mice</a></li>
+                      <li><a href="/collections/headsets"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M4 12a8 8 0 0116 0v6a2 2 0 01-2 2h-2v-6h-4v6H6a2 2 0 01-2-2z"></path>
+                        </svg>Headsets</a></li>
+                      <li><a href="/collections/microphones"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="9" y="2" width="6" height="11" rx="3"></rect><path d="M12 14v6m-4 0h8"></path>
+                        </svg>Microphones</a></li>
+                    </ul>
+                  </div>
+
+                  <div class="mega-block">
+                    <h4 class="mega-heading"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                      <path d="M8 21h8"></path>
+                    </svg>Display & More</h4>
+                    <ul>
+                      <li><a href="/collections/gaming-monitors"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                        </svg>Gaming Monitors</a></li>
+                      <li><a href="/collections/webcams"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <circle cx="12" cy="12" r="3"></circle><circle cx="12" cy="12" r="8"></circle>
+                        </svg>Webcams</a></li>
+                      <li><a href="/collections/speakers"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <rect x="4" y="3" width="16" height="18" rx="2"></rect><circle cx="12" cy="12" r="3"></circle>
+                        </svg>Speakers</a></li>
+                      <li><a href="/collections/gaming-gear"><svg class="sub-icon" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2">
+                          <path d="M6 9h12l3 6H3z"></path><circle cx="9" cy="13" r="1"></circle><circle cx="15" cy="13" r="1"></circle>
+                        </svg>Gaming Gear</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </ul>
+          </li>
+
+          <li class="menu-item"><a href="/collections/mouse" class="menu-link">Gaming Gear</a></li>
+          <li class="menu-item"><a href="/pages/about-us" class="menu-link">About Us</a></li>
+        </ul>
+      </nav>
+
+      <!-- right -->
+  <div class="techouse-right">
+      <button class="icon-btn search-btn" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M21 21l-4.35-4.35" stroke="white" stroke-width="1.6" stroke-linecap="round"></path>
+          <circle cx="11" cy="11" r="6" stroke="white" stroke-width="1.6"></circle>
+        </svg>
+      </button>
+
+      <a href="/account" class="icon-btn login-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span class="login-text">Login</span>
+      </a>
+
+      <a href="/cart" class="icon-btn cart-btn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M6 6h15l-1.5 9h-12z" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+          <circle cx="10" cy="20" r="1.6" fill="white"></circle>
+          <circle cx="18" cy="20" r="1.6" fill="white"></circle>
+        </svg></a>
+
+      <button class="hamburger" aria-label="Open menu">
+        <span class="hamb-line"></span><span class="hamb-line"></span><span class="hamb-line"></span>
+      </button>
+    </div>
+    </div>
+
+    <!-- mobile sidebar -->
+<!-- === MOBILE SIDEBAR MENU === -->
+  <aside class="mobile-sidebar" aria-hidden="true">
+    <div class="mobile-top">
+      <!-- <a href="{{ routes.root_url }}" class="mobile-logo">
+        {% if settings.logo %}
+          <img src="{{ settings.logo | img_url: '200x' }}" alt="{{ shop.name }}">
+        {% endif %}
+      </a> -->
+         <a href="<?= base_url('assets/');?>images/Techouse_300x.png" class="techouse-logo" aria-label="Techouse Computers">
+          <!-- replace /assets/logo.png with your logo path -->
+          <img src="<?= base_url('assets/');?>images/Techouse_300x.png" alt="Techouse Computers"
+            onerror="this.src='https://via.placeholder.com/150x50?text=Techouse+Logo'">
+        </a>
+      <button class="mobile-close" aria-label="Close menu">✕</button>
+    </div>
+
+    <nav class="mobile-nav">
+      <ul>
+        <li class="mobile-item has-children">
+          <button class="mobile-toggle">All Categories ▾</button>
+          <ul class="mobile-submenu">
+            <!-- PC Building -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">PC Building</button>
+              <ul class="mobile-submenu-inner">
+                <li><a href="/pages/pc-builder">PC Builder</a></li>
+                <li><a href="/collections/prebuilt-pc">Prebuilt PCs</a></li>
+              </ul>
+            </li>
+            <!-- Processor -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">Processor</button>
+              <ul class="mobile-submenu-inner">
+                <li><a href="/collections/amd-processor">AMD</a></li>
+                <li><a href="/collections/intel-processor">Intel</a></li>
+              </ul>
+            </li>
+            <!-- RAM -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">Memory (RAM)</button>
+              <ul class="mobile-submenu-inner">
+                <li><a href="/collections/ddr5">DDR5</a></li>
+                <li><a href="/collections/ddr4">DDR4</a></li>
+                <li><a href="/collections/laptop-ram">Laptop RAM</a></li>
+              </ul>
+            </li>
+            <!-- Graphic Card -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">Graphic Card</button>
+              <ul class="mobile-submenu-inner">
+                <li><a href="/collections/nvidia-gpu">NVIDIA GPU</a></li>
+                <li><a href="/collections/amd-gpu">AMD GPU</a></li>
+              </ul>
+            </li>
+            <!-- Motherboard -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">Motherboard</button>
+              <ul class="mobile-submenu-inner">
+                <li><a href="/collections/amd-motherboard">AMD Motherboard</a></li>
+                <li><a href="/collections/intel-motherboard">Intel Motherboard</a></li>
+              </ul>
+            </li>
+            <!-- CPU Cooler -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">CPU Cooler</button>
+              <ul class="mobile-submenu-inner">
+                <li><a href="/collections/liquid-cooler">Liquid Cooler</a></li>
+                <li><a href="/collections/air-cooler">Air Cooler</a></li>
+                <li><a href="/collections/case-fans">Case Fans</a></li>
+              </ul>
+            </li>
+            <!-- Storage -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">Networking & Storage</button>
+              <ul class="mobile-submenu-inner">
+                <li><a href="/collections/hdd">HDD</a></li>
+                <li><a href="/collections/ssd">SSD</a></li>
+                <li><a href="/collections/storage-accessories">Others</a></li>
+              </ul>
+            </li>
+            <!-- Power Supply -->
+            <li><a href="/collections/power-supply">Power Supply</a></li>
+            <!-- Monitor -->
+            <li><a href="/collections/monitor">Monitor</a></li>
+            <!-- Modular Cable -->
+            <li><a href="/collections/modular-cable">Modular Cable</a></li>
+            <!-- Peripherals -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">Peripherals</button>
+              <ul class="mobile-submenu-inner">
+                <li><a href="/collections/keyboard">Keyboard</a></li>
+                <li><a href="/collections/mouse">Mouse</a></li>
+                <li><a href="/collections/speakers">Speakers</a></li>
+                <li><a href="/collections/mousematz">Mousematz</a></li>
+                <li><a href="/collections/headset">Headset</a></li>
+                <li><a href="/collections/gamepad">Gamepad</a></li>
+                <li><a href="/collections/webcam">Webcam</a></li>
+              </ul>
+            </li>
+            <!-- Cabinet -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">Cabinet</button>
+              <ul class="mobile-submenu-inner">
+                <li><a href="/collections/full-tower">Full Tower</a></li>
+                <li><a href="/collections/mid-tower">Mid Tower</a></li>
+                <li><a href="/collections/mini-tower">Mini Tower</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+        <li class="mobile-item"><a href="/pages/pre-built-pcs">Prebuilt PCs</a></li>
+        <li class="mobile-sub has-children">
+          <button class="mobile-toggle">Components</button>
+          <ul class="mobile-submenu-inner">
+            <!-- Core Components -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">Core Components</button>
+              <ul class="mobile-submenu-inner">
+                <li>
+                  <a href=""><i class="fas fa-microchip"></i> Processors (CPU)</a>
+                </li>
+                <li>
+                  <a href="/collections/graphics-cards"><i class="fas fa-desktop"></i> Graphics Cards</a>
+                </li>
+                <li>
+                  <a href="/collections/memory"><i class="fas fa-memory"></i> Memory (RAM)</a>
+                </li>
+                <li>
+                  <a href="/collections/storage"><i class="fas fa-hdd"></i> Storage</a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- Support Components -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">Support Components</button>
+              <ul class="mobile-submenu-inner">
+                <li>
+                  <a href="/collections/motherboards"><i class="fas fa-server"></i> Motherboards</a>
+                </li>
+                <li>
+                  <a href="/collections/power-supplies"><i class="fas fa-bolt"></i> Power Supplies</a>
+                </li>
+                <li>
+                  <a href="/collections/cooling"><i class="fas fa-fan"></i> Cooling</a>
+                </li>
+                <li>
+                  <a href="/collections/cases"><i class="fas fa-box"></i> Cases</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li class="mobile-sub has-children">
+          <button class="mobile-toggle">Peripherals</button>
+          <ul class="mobile-submenu-inner">
+            <!-- Input Devices -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">Input Devices</button>
+              <ul class="mobile-submenu-inner">
+                <li>
+                  <a href="/collections/keyboards"><i class="fas fa-keyboard"></i> Keyboards</a>
+                </li>
+                <li>
+                  <a href="/collections/gaming-mice"><i class="fas fa-mouse"></i> Gaming Mice</a>
+                </li>
+                <li>
+                  <a href="/collections/headsets"><i class="fas fa-headphones"></i> Headsets</a>
+                </li>
+                <li>
+                  <a href="/collections/microphones"><i class="fas fa-microphone"></i> Microphones</a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- Display & More -->
+            <li class="mobile-sub has-children">
+              <button class="mobile-toggle">Display & More</button>
+              <ul class="mobile-submenu-inner">
+                <li>
+                  <a href="/collections/gaming-monitors"><i class="fas fa-tv"></i> Gaming Monitors</a>
+                </li>
+                <li>
+                  <a href="/collections/webcams"><i class="fas fa-video"></i> Webcams</a>
+                </li>
+                <li>
+                  <a href="/collections/speakers"><i class="fas fa-volume-up"></i> Speakers</a>
+                </li>
+                <li>
+                  <a href="/collections/gaming-gear"><i class="fas fa-gamepad"></i> Gaming Gear</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+        <li class="mobile-item"><a href="/collections/mouse">Gaming Gear</a></li>
+        <li class="mobile-item"><a href="/pages/about-us">About Us</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <div class="mobile-overlay"></div>
+  </section>
+
+<script>
+  (function () {
+    // Elements
+    const hamb = document.querySelector('#techouse-header .hamburger');
+    const mobileSidebar = document.querySelector('#techouse-header .mobile-sidebar');
+    const mobileOverlay = document.querySelector('#techouse-header .mobile-overlay');
+    const mobileClose = document.querySelector('#techouse-header .mobile-close');
+    const htmlRoot = document.documentElement;
+    const body = document.body;
+
+    // Toggle mobile sidebar
+    function openMobile() {
+      document.querySelector('#techouse-header').classList.add('mobile-open');
+      mobileSidebar.setAttribute('aria-hidden', 'false');
+      hamb.setAttribute('aria-expanded', 'true');
+      body.style.overflow = 'hidden';
+    }
+    function closeMobile() {
+      document.querySelector('#techouse-header').classList.remove('mobile-open');
+      mobileSidebar.setAttribute('aria-hidden', 'true');
+      hamb.setAttribute('aria-expanded', 'false');
+      body.style.overflow = '';
+    }
+
+    if (hamb) {
+      hamb.addEventListener('click', function () {
+        if (document.querySelector('#techouse-header').classList.contains('mobile-open')) {
+          closeMobile();
+        } else {
+          openMobile();
+        }
+      });
+    }
+    if (mobileOverlay) {
+      mobileOverlay.addEventListener('click', closeMobile);
+    }
+    if (mobileClose) {
+      mobileClose.addEventListener('click', closeMobile);
+    }
+
+    // Mobile submenu toggle for "All Categories"
+    const mobileToggle = document.querySelector('#techouse-header .mobile-toggle');
+    if (mobileToggle) {
+      mobileToggle.addEventListener('click', function () {
+        const parent = this.parentElement;
+        const submenu = parent.querySelector('.mobile-submenu');
+        const expanded = submenu.style.display === 'block';
+        submenu.style.display = expanded ? 'none' : 'block';
+        this.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      });
+    }
+
+    // Desktop: add accessible hover/focus behavior for All Categories
+    const dropdownToggle = document.querySelector('#techouse-header .menu-dropdown-toggle');
+    const dropdownParent = dropdownToggle ? dropdownToggle.parentElement : null;
+    if (dropdownToggle && dropdownParent) {
+      dropdownToggle.addEventListener('click', function (e) {
+        // prevent click on desktop from navigating (we keep hover open) - toggle on click for accessibility
+        e.preventDefault();
+        const submenu = dropdownParent.querySelector('.submenu');
+        const isOpen = submenu.style.opacity === '1';
+        submenu.style.opacity = isOpen ? 0 : 1;
+        submenu.style.transform = isOpen ? 'translateY(6px)' : 'translateY(0)';
+        submenu.style.pointerEvents = isOpen ? 'none' : 'auto';
+        dropdownToggle.setAttribute('aria-expanded', String(!isOpen));
+      });
+    }
+
+    // Close menu on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeMobile();
+    });
+
+    // Close mobile if window resized above breakpoint
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 1024) {
+        closeMobile();
+      }
+    });
+
+    // Optional: close submenu when clicking outside
+    document.addEventListener('click', function (e) {
+      const submenu = document.querySelector('#techouse-header .menu-item-has-children .submenu');
+      if (!submenu) return;
+      const toggle = document.querySelector('#techouse-header .menu-dropdown-toggle');
+      if (!toggle) return;
+      if (!toggle.contains(e.target) && !submenu.contains(e.target) && window.innerWidth > 1024) {
+        submenu.style.opacity = '0';
+        submenu.style.transform = 'translateY(6px)';
+        submenu.style.pointerEvents = 'none';
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  })();
+
+  document.querySelectorAll('.mobile-sub .mobile-toggle').forEach((button) => {
+    button.addEventListener('click', () => {
+      const parent = button.parentElement;
+      parent.classList.toggle('open');
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchBtn = document.querySelector('.search-btn');
+    const searchModal = document.querySelector('search-modal, predictive-search');
+
+    if (searchBtn && searchModal) {
+      searchBtn.addEventListener('click', () => {
+        searchModal.open ? searchModal.open() : searchModal.show && searchModal.show();
+      });
+    } else {
+      // fallback — redirect to search page
+      searchBtn.addEventListener('click', () => {
+        window.location.href = '/search';
+      });
+    }
+  });
+</script>
+
+</body>
+
+</html>

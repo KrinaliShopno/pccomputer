@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PC Builder Studio — Demo (multi-select + synced icons)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="Style.css" />
+</head>
+
+<body>
+
+  <header class="techouse-header">
+    <!-- Logo -->
+    <a href="#" class="techouse-logo">
+      <img src="images/Techouse_300x.png" alt="Techouse Logo">
+      <!-- <span>techouse <span class="brand-accent">computers</span></span> -->
+    </a>
+
+    <!-- Desktop Menu -->
+    <nav class="techouse-center">
+      <ul class="techouse-menu">
+        <li class="menu-item">
+          <button class="menu-dropdown-toggle">All Categories ▾</button>
+          <div class="submenu">
+            <a href="#">All Products</a>
+            <a href="#">Components</a>
+            <a href="#">Peripherals</a>
+          </div>
+        </li>
+        <li><a href="#">Prebuilt PCs</a></li>
+        <li><a href="#">Components</a></li>
+        <li><a href="#">Peripherals</a></li>
+        <li><a href="#">Gaming Gear</a></li>
+      </ul>
+    </nav>
+
+    <!-- Right -->
+    <div class="techouse-right">
+      <a href="#" class="icon-btn1"><i class="fa-solid fa-magnifying-glass"></i></a>
+      <a href="#" class="icon-btn1"><i class="fa-regular fa-user"></i>
+        <div>Login</div>
+      </a>
+      <a href="#" class="icon-btn1 cart-btn">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="cart-count">1</span>
+      </a>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Sidebar -->
+  <aside class="mobile-sidebar">
+    <nav class="mobile-nav">
+      <ul>
+        <li>
+          <button class="mobile-toggle">All Categories ▾</button>
+          <ul class="mobile-submenu">
+            <li><a href="#">All Products</a></li>
+            <li><a href="#">Components</a></li>
+            <li><a href="#">Peripherals</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Prebuilt PCs</a></li>
+        <li><a href="#">Components</a></li>
+        <li><a href="#">Peripherals</a></li>
+        <li><a href="#">Gaming Gear</a></li>
+        <li><a href="#">Login</a></li>
+        <li><a href="#">Compare</a></li>
+        <li><a href="#">Cart (1)</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Overlay -->
+  <div class="mobile-overlay"></div>
+  <!-- Page Banner Section -->
+<section class="page-banner">
+  <div class="banner-inner">
+    <div class="banner-left">
+      <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+    </div>
+    <div class="banner-right">
+      <h1 class="banner-title">PC Builder Studio</h1>
+      <p class="banner-subtitle">Build your dream PC with intelligent compatibility checking</p>
+    </div>
+  </div>
+</section>
+  <section id="pc-builder-studio" class="pc-builder-section" aria-label="PC Builder Studio">
+    <div class="pbs-inner">
+
+      <!-- SIDEBAR -->
+      <aside class="pbs-sidebar" aria-label="Build Controls">
+        <div class="pbs-panel presets">
+          <h3 class="panel-title"><i class="fa-solid fa-lightbulb"></i> Quick Build Presets</h3>
+          <div class="preset" data-preset="gaming"><i class="fa-solid fa-gamepad"></i>
+            <div style="margin-top:6px">Gaming Build<small style="display:block">High-end gaming performance</small>
+            </div>
+          </div>
+          <div class="preset" data-preset="budget"><i class="fa-solid fa-wallet"></i>
+            <div style="margin-top:6px">Budget Build<small style="display:block">Great value for money</small></div>
+          </div>
+          <div class="preset" data-preset="workstation"><i class="fa-solid fa-briefcase"></i>
+            <div style="margin-top:6px">Workstation<small style="display:block">Professional productivity</small></div>
+          </div>
+        </div>
+
+        <div class="pbs-panel current-build">
+          <h3 class="panel-title"><i class="fa-solid fa-box-open"></i> Current Build</h3>
+
+          <div class="progress-row"><span>Progress</span><span class="progress-value" id="pbs-progress">17%</span></div>
+
+          <div class="build-list" id="pbs-build-list">
+            <div class="build-row" data-role="processor-row">
+              <div class="row-left"><i class="fa-solid fa-microchip"></i> Processor <span class="req">Required</span>
+              </div>
+              <div class="row-right">
+                <div id="pbs-selected-processor" class="selected-list placeholder">
+                  <div class="placeholder-text">Select Processor</div>
+                </div>
+                <!-- <button class="remove-btn" data-remove="cpu" title="Clear CPU">✕</button> -->
+              </div>
+            </div>
+
+            <div class="build-row" data-role="motherboard-row">
+              <div class="row-left"><i class="fa-solid fa-puzzle-piece"></i> Motherboard <span
+                  class="req">Required</span></div>
+              <div class="row-right">
+                <div id="pbs-selected-motherboard" class="selected-list placeholder">
+                  <div class="placeholder-text">Select Motherboard</div>
+                </div>
+                <!-- <button class="remove-btn" data-remove="motherboard" title="Clear Motherboard">✕</button> -->
+              </div>
+            </div>
+
+            <div class="build-row" data-role="memory-row">
+              <div class="row-left"><i class="fa-solid fa-memory"></i> Memory <span class="req">Required</span></div>
+              <div class="row-right">
+                <div id="pbs-selected-memory" class="selected-list placeholder">
+                  <div class="placeholder-text">Select Memory</div>
+                </div>
+                <!-- <button class="remove-btn" data-remove="memory" title="Clear Memory">✕</button> -->
+              </div>
+            </div>
+
+            <div class="build-row" data-role="graphics-row">
+              <div class="row-left"><i class="fa-solid fa-gamepad"></i> Graphics Card <span class="req">Required</span>
+              </div>
+              <div class="row-right">
+                <div id="pbs-selected-graphics" class="selected-list placeholder">
+                  <div class="placeholder-text">Select Graphics Card</div>
+                </div>
+                <!-- <button class="remove-btn" data-remove="gamepad" title="Clear GPU">✕</button> -->
+              </div>
+            </div>
+
+            <div class="build-row" data-role="storage-row">
+              <div class="row-left"><i class="fa-solid fa-hdd"></i> Storage <span class="req">Required</span></div>
+              <div class="row-right">
+                <div id="pbs-selected-storage" class="selected-list placeholder">
+                  <div class="placeholder-text">Select Storage</div>
+                </div>
+                <!-- <button class="remove-btn" data-remove="storage" title="Clear Storage">✕</button> -->
+              </div>
+            </div>
+
+            <div class="build-row" data-role="power-row">
+              <div class="row-left"><i class="fa-solid fa-bolt"></i> Power Supply <span class="req">Required</span>
+              </div>
+              <div class="row-right">
+                <div id="pbs-selected-power" class="selected-list placeholder">
+                  <div class="placeholder-text">Select Power Supply</div>
+                </div>
+                <!-- <button class="remove-btn" data-remove="power" title="Clear Power">✕</button> -->
+              </div>
+            </div>
+
+            <div class="build-row" data-role="cooling-row">
+              <div class="row-left"><i class="fa-solid fa-fan"></i> Cooling <span class="req">Required</span></div>
+              <div class="row-right">
+                <div id="pbs-selected-cooling" class="selected-list placeholder">
+                  <div class="placeholder-text">Select Cooling</div>
+                </div>
+                <!-- <button class="remove-btn" data-remove="cooling" title="Clear Cooling">✕</button> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="build-summary">
+            <div>Performance Level: <strong id="pbs-performance">Mid-Range</strong></div>
+            <div>Total Power: <strong id="pbs-power">125W</strong></div>
+            <div>Total Price: <strong id="pbs-total-price">₹65,997</strong></div>
+          </div>
+
+          <div class="build-actions">
+            <button id="pbs-add-to-cart" class="btn btn--primary">
+              <i class="fa-solid fa-cart-shopping"></i> Add Build to Cart (₹0)
+            </button>
+
+            <button id="pbs-clear-build" class="btn btn--outline">
+              <i class="fa-solid fa-rotate-left"></i> Clear Build
+            </button>
+
+            <div style="" class="Save-Build">
+              <button id="pbs-save-build" class="btn btn--outline" disabled>Save Build</button>
+              <button id="pbs-continue-shopping" class="btn btn--ghost">Continue Shopping</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="pbs-main" aria-label="Products">
+        <div class="pbs-panel header-panel">
+          <div class="header-left">
+            <div class="icon-row" aria-hidden="false">
+              <button class="icon-btn" data-type="all" title="All"><i class="fa-solid fa-list"></i><span
+                  class="icon-check">✓</span></button>
+              <button class="icon-btn" data-type="cpu" title="Processors"><i class="fa-solid fa-microchip"></i><span
+                  class="icon-check">✓</span></button>
+              <button class="icon-btn" data-type="motherboard" title="Motherboards"><i
+                  class="fa-solid fa-puzzle-piece"></i><span class="icon-check">✓</span></button>
+              <button class="icon-btn" data-type="memory" title="Memory"><i class="fa-solid fa-memory"></i><span
+                  class="icon-check">✓</span></button>
+              <button class="icon-btn" data-type="gamepad" title="Graphics"><i class="fa-solid fa-gamepad"></i><span
+                  class="icon-check">✓</span></button>
+              <button class="icon-btn" data-type="storage" title="Storage"><i class="fa-solid fa-hdd"></i><span
+                  class="icon-check">✓</span></button>
+              <button class="icon-btn" data-type="power" title="Power"><i class="fa-solid fa-bolt"></i><span
+                  class="icon-check">✓</span></button>
+              <button class="icon-btn" data-type="cooling" title="Cooling"><i class="fa-solid fa-fan"></i><span
+                  class="icon-check">✓</span></button>
+            </div>
+            <div class="header-titles">
+              <h2>Processor</h2>
+              <p>Choose the best processor for your build</p>
+            </div>
+          </div>
+          <div class="header-right"><a href="#" class="btn btn--ghost" id="browse-all">Browse All Processors</a></div>
+        </div>
+
+        <div class="pbs-grid" id="pbs-grid">
+          <!-- sample cards (same as earlier) -->
+          <article class="pbs-card" data-demo="true" data-type="cpu" data-id="demo-intel-13900k"
+            data-title="Intel Core i9-13900K" data-price="47999" data-cores="24" data-threads="32" data-boost="5.8">
+            <div class="card-top"><span class="card-badge"><i class="fa-solid fa-microchip"></i></span>
+              <h3 class="card-title">Intel Core i9-13900K</h3>
+            </div>
+            <div class="card-media"><img
+                src="https://images.unsplash.com/photo-1686195165991-74af7c2918d5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                alt="Intel Core i9-13900K"></div>
+            <ul class="card-specs">
+              <li><i class="fa-solid fa-microchip"></i> 24 Cores</li>
+              <li><i class="fa-solid fa-network-wired"></i> 32 Threads</li>
+              <li><i class="fa-solid fa-bolt"></i> 5.8 GHz Boost</li>
+            </ul>
+            <div class="card-footer">
+              <div class="card-price">₹47,999</div><button class="btn btn--small select-btn">Select</button>
+            </div>
+          </article>
+
+          <article class="pbs-card" data-demo="true" data-type="cpu" data-id="demo-amd-7900x"
+            data-title="AMD Ryzen 9 7900X" data-price="43999" data-cores="12" data-threads="24" data-boost="5.6">
+            <div class="card-top"><span class="card-badge"><i class="fa-solid fa-microchip"></i></span>
+              <h3 class="card-title">AMD Ryzen 9 7900X</h3>
+            </div>
+            <div class="card-media"><img
+                src="https://images.unsplash.com/photo-1542751371-adc38448a05e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                alt="AMD Ryzen 9 7900X"></div>
+            <ul class="card-specs">
+              <li><i class="fa-solid fa-microchip"></i> 12 Cores</li>
+              <li><i class="fa-solid fa-network-wired"></i> 24 Threads</li>
+              <li><i class="fa-solid fa-bolt"></i> 5.6 GHz Boost</li>
+            </ul>
+            <div class="card-footer">
+              <div class="card-price">₹43,999</div><button class="btn btn--small select-btn">Select</button>
+            </div>
+          </article>
+
+          <article class="pbs-card" data-demo="true" data-type="motherboard" data-id="demo-mb-rog"
+            data-title="ASUS ROG Strix Z790-E" data-price="32999">
+            <div class="card-top"><span class="card-badge"><i class="fa-solid fa-puzzle-piece"></i></span>
+              <h3 class="card-title">ASUS ROG Strix Z790-E</h3>
+            </div>
+            <div class="card-media"><img
+                src="https://images.unsplash.com/photo-1587202372775-6c0a2b1a1f4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                alt="ASUS ROG"></div>
+            <ul class="card-specs">
+              <li><i class="fa-solid fa-microchip"></i> LGA1700</li>
+              <li><i class="fa-solid fa-memory"></i> DDR5 Support</li>
+              <li><i class="fa-solid fa-wifi"></i> WiFi 6E</li>
+            </ul>
+            <div class="card-footer">
+              <div class="card-price">₹32,999</div><button class="btn btn--small select-btn">Select</button>
+            </div>
+          </article>
+
+          <article class="pbs-card" data-demo="true" data-type="memory" data-id="demo-ram-32"
+            data-title="Corsair Vengeance 32GB" data-price="9999">
+            <div class="card-top"><span class="card-badge"><i class="fa-solid fa-memory"></i></span>
+              <h3 class="card-title">Corsair Vengeance 32GB</h3>
+            </div>
+            <div class="card-media"><img
+                src="https://images.unsplash.com/photo-1591696205602-1f3a4801f0a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                alt="Corsair RAM"></div>
+            <ul class="card-specs">
+              <li><i class="fa-solid fa-microchip"></i> 32GB (2x16GB)</li>
+              <li><i class="fa-solid fa-bolt"></i> 5200MHz</li>
+              <li><i class="fa-solid fa-check"></i> CL40</li>
+            </ul>
+            <div class="card-footer">
+              <div class="card-price">₹9,999</div><button class="btn btn--small select-btn">Select</button>
+            </div>
+          </article>
+
+          <article class="pbs-card" data-demo="true" data-type="gamepad" data-id="demo-gpu-4080"
+            data-title="NVIDIA RTX 4080" data-price="119999">
+            <div class="card-top"><span class="card-badge"><i class="fa-solid fa-gamepad"></i></span>
+              <h3 class="card-title">NVIDIA RTX 4080</h3>
+            </div>
+            <div class="card-media"><img
+                src="https://images.unsplash.com/photo-1611874072409-4a3e4a7a6b2f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                alt="RTX 4080"></div>
+            <ul class="card-specs">
+              <li><i class="fa-solid fa-microchip"></i> 16GB GDDR6X</li>
+              <li><i class="fa-solid fa-bolt"></i> High Performance</li>
+              <li><i class="fa-solid fa-check"></i> Ray Tracing</li>
+            </ul>
+            <div class="card-footer">
+              <div class="card-price">₹1,19,999</div><button class="btn btn--small select-btn">Select</button>
+            </div>
+          </article>
+
+          <article class="pbs-card" data-demo="true" data-type="storage" data-id="demo-ssd-2tb"
+            data-title="Samsung 2TB NVMe" data-price="11999">
+            <div class="card-top"><span class="card-badge"><i class="fa-solid fa-hdd"></i></span>
+              <h3 class="card-title">Samsung 2TB NVMe</h3>
+            </div>
+            <div class="card-media"><img
+                src="https://images.unsplash.com/photo-1580910051078-1b8ae5a6fb5a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                alt="Samsung NVMe"></div>
+            <ul class="card-specs">
+              <li><i class="fa-solid fa-microchip"></i> 2TB</li>
+              <li><i class="fa-solid fa-bolt"></i> PCIe 4.0</li>
+              <li><i class="fa-solid fa-check"></i> High Read/Write</li>
+            </ul>
+            <div class="card-footer">
+              <div class="card-price">₹11,999</div><button class="btn btn--small select-btn">Select</button>
+            </div>
+          </article>
+
+          <article class="pbs-card" data-demo="true" data-type="power" data-id="demo-psu-850"
+            data-title="Corsair RM850x" data-price="8999">
+            <div class="card-top"><span class="card-badge"><i class="fa-solid fa-bolt"></i></span>
+              <h3 class="card-title">Corsair RM850x</h3>
+            </div>
+            <div class="card-media"><img
+                src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                alt="PSU"></div>
+            <ul class="card-specs">
+              <li><i class="fa-solid fa-microchip"></i> 850W</li>
+              <li><i class="fa-solid fa-check"></i> 80+ Gold</li>
+              <li><i class="fa-solid fa-plug"></i> Fully Modular</li>
+            </ul>
+            <div class="card-footer">
+              <div class="card-price">₹8,999</div><button class="btn btn--small select-btn">Select</button>
+            </div>
+          </article>
+
+          <article class="pbs-card" data-demo="true" data-type="cooling" data-id="demo-aio-360"
+            data-title="NZXT Kraken X73" data-price="12999">
+            <div class="card-top"><span class="card-badge"><i class="fa-solid fa-fan"></i></span>
+              <h3 class="card-title">NZXT Kraken X73</h3>
+            </div>
+            <div class="card-media"><img
+                src="https://images.unsplash.com/photo-1602524816902-f68a7a1a5a66?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800"
+                alt="AIO Cooler"></div>
+            <ul class="card-specs">
+              <li><i class="fa-solid fa-droplet"></i> 360mm AIO</li>
+              <li><i class="fa-solid fa-fan"></i> RGB Fans</li>
+              <li><i class="fa-solid fa-check"></i> Excellent Cooling</li>
+            </ul>
+            <div class="card-footer">
+              <div class="card-price">₹12,999</div><button class="btn btn--small select-btn">Select</button>
+            </div>
+          </article>
+        </div>
+      </main>
+    </div>
+  </section>
+<footer class="techouse-footer">
+  <div class="footer-container">
+
+    <!-- Column 1 -->
+    <div class="footer-col footer-about">
+      <div class="footer-logo">
+        <img src="images/d1b4aa24-9e95-45fb-a0a3-a126c1349000.png" alt="Techouse Logo">
+        <span>Techouse <strong>Computers</strong></span>
+      </div>
+      <p>Your ultimate destination for custom gaming PCs, premium components, and professional streaming equipment.</p>
+      <div class="footer-socials">
+        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+      </div>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="footer-col">
+      <h4>Products</h4>
+      <ul>
+        <li><a href="#">PC Builder</a></li>
+        <li><a href="#">Prebuilt PCs</a></li>
+        <li><a href="#">Graphics Cards</a></li>
+        <li><a href="#">Processors</a></li>
+        <li><a href="#">Gaming Monitors</a></li>
+        <li><a href="#">Peripherals</a></li>
+        <li><a href="#">Streaming Gear</a></li>
+      </ul>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Shipping Policy</a></li>
+        <li><a href="#">Build Guide</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Cancellation & Refund</a></li>
+      </ul>
+    </div>
+
+    <!-- Column 4 -->
+    <div class="footer-col">
+      <h4>Information</h4>
+      <ul>
+        <li><a href="#">Track Your Order</a></li>
+        <li><a href="#">Browse by Brand</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+
+    <!-- Column 5 -->
+    <div class="footer-col footer-connect">
+      <h4>Stay Connected</h4>
+      <p>Get the latest deals and tech news delivered to your inbox.</p>
+      <form class="footer-newsletter">
+        <input type="email" placeholder="Enter your email" required>
+        <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+      </form>
+      <div class="footer-contact">
+        <p><i class="fa-solid fa-phone"></i> +91 74359 82956</p>
+        <p><i class="fa-solid fa-envelope"></i> techousesurat@gmail.com</p>
+        <p><i class="fa-solid fa-location-dot"></i> Surat, Gujarat</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2024 Techouse Computers. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms & Conditions</a>
+      <a href="#">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+  <div id="toast-root" aria-live="polite"></div>
+<script>
+(function () {
+  const section = document.getElementById('pc-builder-studio');
+  if (!section) return;
+
+  // helpers
+  function formatINR(n) { if (isNaN(n)) return '₹0'; return '₹' + n.toLocaleString('en-IN'); }
+  function toast(msg, t = 1400) { const r = document.getElementById('toast-root'); const e = document.createElement('div'); e.className = 'toast'; e.textContent = msg; r.appendChild(e); setTimeout(() => e.remove(), t); }
+
+  const allCards = Array.from(section.querySelectorAll('.pbs-card'));
+  const iconButtons = Array.from(section.querySelectorAll('.icon-btn'));
+
+  const sidebarMap = {
+    cpu: 'pbs-selected-processor',
+    motherboard: 'pbs-selected-motherboard',
+    memory: 'pbs-selected-memory',
+    gamepad: 'pbs-selected-graphics',
+    storage: 'pbs-selected-storage',
+    power: 'pbs-selected-power',
+    cooling: 'pbs-selected-cooling'
+  };
+
+  // filter display
+  function showCategoryForSelectedTypes(types) {
+    if (!types || types.length === 0) {
+      allCards.forEach(c => c.style.display = 'flex');
+      return;
+    }
+    allCards.forEach(c => c.style.display = types.includes(c.dataset.type) ? 'flex' : 'none');
+  }
+
+  // update top icons' checked state based on selected cards (only when items selected/unselected)
+  function updateIconChecksFromSelected() {
+    iconButtons.forEach(btn => {
+      const t = btn.dataset.type;
+      if (!t || t === 'all') return;
+      const has = !!section.querySelector(`.pbs-card.selected[data-type="${t}"]`);
+      if (has) btn.classList.add('checked'); else btn.classList.remove('checked');
+    });
+  }
+
+  // render one sidebar slot
+  function renderSidebarSlot(type) {
+    const container = document.getElementById(sidebarMap[type]);
+    if (!container) return;
+    const selected = Array.from(section.querySelectorAll(`.pbs-card.selected[data-type="${type}"]`));
+    container.innerHTML = ''; // clear
+    if (selected.length === 0) {
+      container.classList.add('placeholder');
+      const placeholder = document.createElement('div');
+      placeholder.className = 'placeholder-text';
+      const label = (type === 'cpu' ? 'Processor' : (type === 'gamepad' ? 'Graphics Card' : type.charAt(0).toUpperCase() + type.slice(1)));
+      placeholder.textContent = 'Select ' + label;
+      container.appendChild(placeholder);
+    } else {
+      container.classList.remove('placeholder');
+      selected.forEach(card => {
+        const id = card.dataset.id || (card.dataset.title || Math.random().toString(36).slice(2));
+        const title = card.dataset.title || card.querySelector('.card-title')?.textContent || 'Item';
+        const price = Number(card.dataset.price || 0);
+        const entry = document.createElement('div');
+        entry.className = 'selected-entry';
+        entry.dataset.selectedId = id;
+        entry.dataset.selectedType = type;
+        entry.innerHTML = `<div class="entry-title">${title} <span class="price-small">${formatINR(price)}</span></div>
+                           <button class="entry-remove" title="Remove this">✕</button>`;
+        container.appendChild(entry);
+      });
+    }
+  }
+
+  // render all slots
+  function renderSidebar() {
+    for (const t in sidebarMap) renderSidebarSlot(t);
+    // show/hide global remove-btn for each row (if you use .remove-btn buttons)
+    const removes = section.querySelectorAll('.remove-btn');
+    removes.forEach(btn => {
+      const type = btn.dataset.remove;
+      const has = section.querySelector(`.pbs-card.selected[data-type="${type}"]`);
+      btn.style.display = has ? 'inline-block' : 'none';
+    });
+  }
+
+  // totals
+  function recalcTotals() {
+    const selected = Array.from(section.querySelectorAll('.pbs-card.selected'));
+    let total = 0, power = 0;
+    selected.forEach(c => {
+      total += Number(c.dataset.price || 0);
+      const t = c.dataset.type;
+      if (t === 'cpu') power += 125;
+      if (t === 'gamepad') power += 320;
+      if (t === 'motherboard') power += 30;
+      if (t === 'memory') power += 10;
+      if (t === 'storage') power += 8;
+      if (t === 'power') power += 5;
+      if (t === 'cooling') power += 10;
+    });
+    const totalPriceEl = document.getElementById('pbs-total-price');
+    if (totalPriceEl) totalPriceEl.textContent = formatINR(total);
+    const powerEl = document.getElementById('pbs-power');
+    if (powerEl) powerEl.textContent = (power ? power + 'W' : '—');
+    const addBtn = document.getElementById('pbs-add-to-cart');
+    if (addBtn) addBtn.textContent = `Add Build to Cart (${formatINR(total)})`;
+    updateIconChecksFromSelected();
+  }
+
+  // helper: find card element by data-id or title
+  function findCardById(id) {
+    return allCards.find(c => (c.dataset.id || c.dataset.title) === id);
+  }
+
+  // central click delegation for the builder section
+  section.addEventListener('click', function (e) {
+    // TOP ICON CLICK -> only filter (do NOT toggle checked)
+   // TOP ICON CLICK -> only filter (do NOT toggle checked, do NOT scroll page)
+const iconBtn = e.target.closest('.icon-btn');
+if (iconBtn && iconBtn.dataset.type) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const type = iconBtn.dataset.type;
+  if (type === 'all') {
+    showCategoryForSelectedTypes([]); // show all
+    toast('Showing all categories');
+    return;
+  }
+  showCategoryForSelectedTypes([type]); // only filter cards
+
+  // ❌ remove auto scroll (was scrolling to first card)
+  return;
+}
+
+    // SELECT / UNSELECT card
+    const selBtn = e.target.closest('.select-btn');
+    if (selBtn) {
+      const card = selBtn.closest('.pbs-card');
+      if (!card) return;
+      if (card.classList.contains('selected')) {
+        // unselect
+        card.classList.remove('selected');
+        selBtn.textContent = 'Select';
+      } else {
+        // select (allow multiple)
+        card.classList.add('selected');
+        selBtn.textContent = 'Selected';
+      }
+      renderSidebar();
+      recalcTotals();
+      return;
+    }
+
+    // single sidebar entry remove
+    const entryRemove = e.target.closest('.entry-remove');
+    if (entryRemove) {
+      const entry = entryRemove.closest('.selected-entry');
+      if (!entry) return;
+      const selId = entry.dataset.selectedId;
+      const card = findCardById(selId);
+      if (card) {
+        card.classList.remove('selected');
+        const sb = card.querySelector('.select-btn');
+        if (sb) sb.textContent = 'Select';
+      }
+      renderSidebar();
+      recalcTotals();
+      return;
+    }
+
+    // global remove (clear all selections of that type via .remove-btn if present)
+    const removeBtn = e.target.closest('.remove-btn');
+    if (removeBtn) {
+      const type = removeBtn.dataset.remove;
+      const selCards = Array.from(section.querySelectorAll(`.pbs-card.selected[data-type="${type}"]`));
+      selCards.forEach(c => {
+        c.classList.remove('selected');
+        const b = c.querySelector('.select-btn');
+        if (b) b.textContent = 'Select';
+      });
+      renderSidebar();
+      recalcTotals();
+      return;
+    }
+
+    // preset clicks (left panel)
+    const preset = e.target.closest('.preset');
+    if (preset) {
+      const which = preset.dataset.preset;
+      const cards = Array.from(section.querySelectorAll('.pbs-card'));
+      if (which === 'gaming') {
+        const cpu = cards.find(c => c.dataset.type === 'cpu');
+        const gpu = cards.find(c => c.dataset.type === 'gamepad');
+        const mb = cards.find(c => c.dataset.type === 'motherboard');
+        if (cpu) cpu.querySelector('.select-btn')?.click();
+        if (gpu) gpu.querySelector('.select-btn')?.click();
+        if (mb) mb.querySelector('.select-btn')?.click();
+        document.getElementById('pbs-performance').textContent = 'High';
+        document.getElementById('pbs-power').textContent = '420W';
+        document.getElementById('pbs-progress').textContent = '80%';
+        toast('Applied Gaming preset');
+      } else if (which === 'budget') {
+        const cpu = cards.slice().reverse().find(c => c.dataset.type === 'cpu');
+        const ram = cards.find(c => c.dataset.type === 'memory');
+        if (cpu) cpu.querySelector('.select-btn')?.click();
+        if (ram) ram.querySelector('.select-btn')?.click();
+        document.getElementById('pbs-performance').textContent = 'Entry';
+        document.getElementById('pbs-power').textContent = '95W';
+        document.getElementById('pbs-progress').textContent = '40%';
+        toast('Applied Budget preset');
+      } else if (which === 'workstation') {
+        const cpu = cards.find(c => c.dataset.type === 'cpu');
+        const ram = cards.find(c => c.dataset.type === 'memory');
+        const mb = cards.find(c => c.dataset.type === 'motherboard');
+        if (cpu) cpu.querySelector('.select-btn')?.click();
+        if (ram) ram.querySelector('.select-btn')?.click();
+        if (mb) mb.querySelector('.select-btn')?.click();
+        document.getElementById('pbs-performance').textContent = 'Workstation';
+        document.getElementById('pbs-power').textContent = '180W';
+        document.getElementById('pbs-progress').textContent = '60%';
+        toast('Applied Workstation preset');
+      }
+      return;
+    }
+  });
+
+  // wire build-row click to filter corresponding type (keeps behavior in sync)
+  function wireBuildRowClicks() {
+    const rows = section.querySelectorAll('.build-row');
+    rows.forEach(row => {
+      const left = row.querySelector('.row-left');
+      left?.addEventListener('click', () => {
+        const role = row.getAttribute('data-role') || '';
+        const map = {
+          'processor-row': 'cpu',
+          'motherboard-row': 'motherboard',
+          'memory-row': 'memory',
+          'graphics-row': 'gamepad',
+          'storage-row': 'storage',
+          'power-row': 'power',
+          'cooling-row': 'cooling'
+        };
+        const t = map[role];
+        if (!t) return;
+        showCategoryForSelectedTypes([t]);
+        const first = allCards.find(c => c.dataset.type === t);
+        if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+  }
+
+  // Add to cart
+  document.getElementById('pbs-add-to-cart')?.addEventListener('click', () => {
+    const selected = Array.from(section.querySelectorAll('.pbs-card.selected'));
+    if (!selected.length) { alert('Please select at least one component first.'); return; }
+    const items = selected.map(c => ({ id: c.dataset.id || c.dataset.title, title: c.dataset.title || c.querySelector('.card-title')?.textContent || 'Item', type: c.dataset.type, price: Number(c.dataset.price || 0) }));
+    const total = items.reduce((s, i) => s + i.price, 0);
+    const build = { items, total, createdAt: new Date().toISOString() };
+    const cart = JSON.parse(localStorage.getItem('pbs_cart_demo') || '[]');
+    cart.push(build);
+    localStorage.setItem('pbs_cart_demo', JSON.stringify(cart));
+    toast('Build added to cart');
+  });
+
+  // Save build locally
+  document.getElementById('pbs-save-build')?.addEventListener('click', () => {
+    const selected = Array.from(section.querySelectorAll('.pbs-card.selected'));
+    if (!selected.length) { alert('Please select components first before saving.'); return; }
+    const saved = JSON.parse(localStorage.getItem('pbs_saved_builds_demo') || '[]');
+    const build = {
+      items: selected.map(c => ({ id: c.dataset.id || '', title: c.dataset.title || '', type: c.dataset.type, price: Number(c.dataset.price || 0) })),
+      performance: document.getElementById('pbs-performance').textContent,
+      power: document.getElementById('pbs-power').textContent,
+      total: document.getElementById('pbs-total-price').textContent,
+      savedAt: new Date().toISOString()
+    };
+    saved.push(build);
+    localStorage.setItem('pbs_saved_builds_demo', JSON.stringify(saved));
+    toast('Build saved locally');
+  });
+
+  // Clear Build
+  document.getElementById('pbs-clear-build')?.addEventListener('click', () => {
+    const selected = section.querySelectorAll('.pbs-card.selected');
+    selected.forEach(card => {
+      card.classList.remove('selected');
+      const sb = card.querySelector('.select-btn');
+      if (sb) sb.textContent = 'Select';
+    });
+    renderSidebar();
+    recalcTotals();
+    toast('Build cleared');
+  });
+
+  // browse-all behavior (show processors)
+  document.getElementById('browse-all')?.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    showCategoryForSelectedTypes(['cpu']);
+    const vis = allCards.find(c => c.dataset.type === 'cpu');
+    if (vis) vis.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  // debug helpers
+  window.pbsDemo = {
+    getCart() { return JSON.parse(localStorage.getItem('pbs_cart_demo') || '[]'); },
+    getSaved() { return JSON.parse(localStorage.getItem('pbs_saved_builds_demo') || '[]'); },
+    clearDemo() { localStorage.removeItem('pbs_cart_demo'); localStorage.removeItem('pbs_saved_builds_demo'); toast('Demo data cleared'); }
+  };
+
+  // init
+  wireBuildRowClicks();
+  renderSidebar();
+  recalcTotals();
+  showCategoryForSelectedTypes([]); // show all initially
+
+  // --- small mobile menu/hamburger script (was in your second <script>) ---
+  const hamb = document.getElementById('hamburger');
+  const overlay = document.querySelector('.mobile-overlay');
+  const mobileToggle = document.querySelector('.mobile-toggle');
+
+  function openMenu() {
+    document.body.classList.add('mobile-open');
+    if (hamb) hamb.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    document.body.classList.remove('mobile-open');
+    if (hamb) hamb.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  hamb?.addEventListener('click', () => {
+    if (document.body.classList.contains('mobile-open')) { closeMenu(); }
+    else { openMenu(); }
+  });
+  overlay?.addEventListener('click', closeMenu);
+
+  // Mobile submenu toggle
+  if (mobileToggle) {
+    mobileToggle.addEventListener('click', function () {
+      const submenu = this.nextElementSibling;
+      submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+    });
+  }
+})();
+</script>
+
+<script>
+    const hamb = document.getElementById('hamburger');
+    const overlay = document.querySelector('.mobile-overlay');
+    const sidebar = document.querySelector('.mobile-sidebar');
+    function openMenu() {
+      sidebar.style.transform = 'translateX(0)';
+      overlay.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      sidebar.style.transform = 'translateX(-100%)';
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    hamb.addEventListener('click', () => {
+      if (sidebar.style.transform === 'translateX(0px)') {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+    overlay.addEventListener('click', closeMenu);
+  </script>
+
+</body>
+
+</html>
