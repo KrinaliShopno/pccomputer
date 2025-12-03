@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming Gear & Accessories | Techouse Computers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b0f19;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .page-title {
+            padding: 25px 60px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #22d3ee;
+            font-size: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .Gaming {
+            display: flex;
+            gap: 30px;
+            padding: 30px 60px;
+        }
+
+        .sidebar-game {
+            width: 270px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .filter-box {
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: inset 0 0 12px rgba(30, 58, 138, 0.2);
+        }
+
+        .filter-box h3 {
+            color: #22d3ee;
+            font-size: 15px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            /* gap: 8px; */
+        }
+
+        .filter-box h3::before {
+            content: '';
+            font-size: 13px;
+        }
+
+        .filter-box label {
+            display: block;
+            color: #cbd5e1;
+            font-size: 14px;
+            margin: 6px 0;
+            cursor: pointer;
+        }
+
+        input[type=checkbox],
+        input[type=radio] {
+            accent-color: #22d3ee;
+            margin-right: 6px;
+        }
+
+        .range-box {
+            position: relative;
+        }
+
+        .range-box input[type=range] {
+            width: 100%;
+            height: 5px;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #22d3ee, #111827);
+            outline: none;
+        }
+
+        .range-box span {
+            display: flex;
+            justify-content: space-between;
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .toggle-box {
+            display: flex;
+            align-items: center;
+            /* gap: 8px; */
+            background: #111827;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 15px;
+            color: #cbd5e1;
+        }
+
+        .toggle-box input {
+            width: 16px;
+            height: 16px;
+        }
+
+        .toggle-box span {
+            font-size: 14px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            flex: 1;
+            height: 100%;
+        }
+
+        .product-card {
+            background: #111827;
+            border: 1px solid rgba(94, 234, 212, 0.1);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            /* box-shadow: 0 10px 25px rgba(94, 234, 212, 0.3); */
+            border-color: rgba(94, 234, 212, 0.4);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .badge {
+            position: absolute;
+            top: 12px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .badge-left {
+            left: 12px;
+            background: #22d3ee;
+        }
+
+        .badge-right {
+            right: 12px;
+            background: #facc15;
+        }
+
+        .product-info {
+            padding: 16px;
+        }
+
+        .category-tag {
+            background: rgba(37, 99, 235, 0.15);
+            color: #60a5fa;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            display: inline-block;
+        }
+
+        .product-info h4 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: #f3f4f6;
+            margin-top: 15px;
+        }
+
+        .product-info p {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .star-icon {
+            width: 14px;
+            height: 14px;
+            margin-right: 2px;
+            filter: drop-shadow(0 0 3px rgba(250, 204, 21, 0.4));
+        }
+
+        .stars {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin-bottom: 10px;
+        }
+
+        .stars img {
+            width: 14px;
+            height: 14px;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .features span {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: 11px;
+            color: #cbd5e1;
+        }
+
+        .price {
+            font-size: 18px;
+            color: #5eead4;
+            font-weight: 700;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #6b7280;
+            font-size: 13px;
+            margin-left: 5px;
+        }
+
+        .buttons-details {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .btn1 {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-view {
+            border: 1px solid #5eead4;
+            color: #5eead4;
+            background: transparent;
+        }
+
+        .btn-view:hover {
+            background: rgba(94, 234, 212, 0.1);
+        }
+
+        .btn-cart {
+            background: linear-gradient(90deg, #60a5fa, #5eead4);
+            color: #0f172a;
+        }
+
+        .btn-cart:hover {
+            opacity: 0.9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #0f172a;
+            color: #94a3b8;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width:425px) {
+            .sidebar-game {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .Gaming {
+                display: block;
+                gap: 30px;
+                padding: 20px 20px;
+            }
+
+            .page-title {
+                padding: 25px 20px;
+
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-title">Gaming Gear & Accessories <span
+            style="color:#22c55e;background:#052e16;padding:2px 10px;border-radius:6px;font-size:13px;margin-left:10px">8
+            Products</span></div>
+
+    <section class="container Gaming">
+        <aside class="sidebar-game">
+            <div class="filter-box">
+                <h3>Sort By</h3>
+                <select id="sortSelect"
+                    style="width:100%;padding:8px;border-radius:8px;background:#0b0f19;color:#fff;border:1px solid rgba(255,255,255,0.1)">
+                    <option value="popular">Most Popular</option>
+                    <option value="low">Price Low to High</option>
+                    <option value="high">Price High to Low</option>
+                </select>
+            </div>
+            <div class="filter-box">
+                <h3>Price Range</h3>
+                <div class="range-box">
+                    <input type="range" id="priceRange" min="2000" max="20000" value="20000">
+                    <span><span>₹3,000</span><span>₹20,000</span></span>
+                </div>
+            </div>
+            <div class="toggle-box">
+                <input type="checkbox" id="wirelessFilter"><span>Wireless Only</span>
+            </div>
+            <div class="filter-box">
+                <h3>Category</h3>
+                <label><input type="checkbox" class="category-filter" value="Controller"> Controller</label>
+                <label><input type="checkbox" class="category-filter" value="Mobile Controller"> Mobile
+                    Controller</label>
+                <label><input type="checkbox" class="category-filter" value="Lapboard"> Lapboard</label>
+                <label><input type="checkbox" class="category-filter" value="Mouse Pad"> Mouse Pad</label>
+                <label><input type="checkbox" class="category-filter" value="Stream Deck"> Stream Deck</label>
+                <label><input type="checkbox" class="category-filter" value="Cooling"> Cooling</label>
+            </div>
+            <div class="filter-box">
+                <h3>Brand</h3>
+                <label><input type="checkbox" class="brand-filter" value="Microsoft"> Microsoft</label>
+                <label><input type="checkbox" class="brand-filter" value="Razer"> Razer</label>
+                <label><input type="checkbox" class="brand-filter" value="Corsair"> Corsair</label>
+                <label><input type="checkbox" class="brand-filter" value="SteelSeries"> SteelSeries</label>
+                <label><input type="checkbox" class="brand-filter" value="Elgato"> Elgato</label>
+                <label><input type="checkbox" class="brand-filter" value="ASUS"> ASUS</label>
+                <label><input type="checkbox" class="brand-filter" value="Ant Esports"> Ant Esports</label>
+            </div>
+            <div class="filter-box">
+                <h3>Compatibility</h3>
+                <label><input type="checkbox" class="compatibility-filter" value="Xbox"> Xbox</label>
+                <label><input type="checkbox" class="compatibility-filter" value="PC"> PC</label>
+                <label><input type="checkbox" class="compatibility-filter" value="Mobile"> Mobile</label>
+                <label><input type="checkbox" class="compatibility-filter" value="Android"> Android</label>
+                <label><input type="checkbox" class="compatibility-filter" value="iPhone"> iPhone</label>
+                <label><input type="checkbox" class="compatibility-filter" value="Console"> Console</label>
+                <label><input type="checkbox" class="compatibility-filter" value="Universal"> Universal</label>
+                <label><input type="checkbox" class="compatibility-filter" value="Mac"> Mac</label>
+                <label><input type="checkbox" class="compatibility-filter" value="ROG Phone"> ROG Phone</label>
+                <label><input type="checkbox" class="compatibility-filter" value="PS3"> PS3</label>
+                <label><input type="checkbox" class="compatibility-filter" value="Nintendo Switch"> Nintendo
+                    Switch</label>
+            </div>
+        </aside>
+
+        <div class="product-grid" id="productGrid"></div>
+    </section>
+
+
+    <script>
+        const products = [
+            { title: 'SteelSeries QcK Gaming Surface', desc: 'Large gaming mouse pad with optimized surface texture', category: 'Mouse Pad', price: 2999, old: 4499, stars: 1023, features: ['Large Size', 'Non-slip Base', 'Consistent Glide'], brand: 'SteelSeries', compatibility: ['PC', 'Console'], wireless: false, tagRight: 'Essential', img: '/images/2149529409.jpg' },
+            { title: 'Xbox Wireless Controller', desc: 'Official wireless controller with enhanced D-pad and textured grips', category: 'Controller', price: 5499, old: 6499, stars: 892, features: ['Share Button', 'Textured Grips', '3.5mm Audio Jack'], brand: 'Microsoft', compatibility: ['Xbox', 'PC'], wireless: true, tagLeft: 'Wireless', tagRight: 'Official', img: '/images/2149529409.jpg' },
+            { title: 'Elgato Stream Deck', desc: '15 customizable LCD keys for content creation and streaming', category: 'Stream Deck', price: 16999, old: 19999, stars: 445, features: ['15 LCD Keys', 'Customizable Actions', 'Multi-Platform'], brand: 'Elgato', compatibility: ['PC', 'Mac'], wireless: false, tagRight: 'Content Creator', img: '/images/2149529409.jpg' },
+            { title: 'ASUS ROG Phone Cooler', desc: 'Active cooling fan for mobile gaming phones', category: 'Cooling', price: 4999, old: 5999, stars: 298, features: ['Active Cooling', 'RGB Lighting', 'Universal Clip'], brand: 'ASUS', compatibility: ['Mobile', 'ROG Phone'], wireless: false, tagRight: 'Mobile Cooling', img: '/images/2149529409.jpg' },
+            { title: 'ASUS ROG Phone Cooler', desc: 'Active cooling fan for mobile gaming phones', category: 'Cooling', price: 4999, old: 5999, stars: 298, features: ['Active Cooling', 'RGB Lighting', 'Universal Clip'], brand: 'ASUS', compatibility: ['Mobile', 'ROG Phone'], wireless: false, tagRight: 'Mobile Cooling', img: '/images/2149529409.jpg' }
+        ];
+
+        const grid = document.getElementById('productGrid');
+        const range = document.getElementById('priceRange');
+        const catFilters = document.querySelectorAll('.category-filter');
+        const brandFilters = document.querySelectorAll('.brand-filter');
+        const compatFilters = document.querySelectorAll('.compatibility-filter');
+        const wirelessFilter = document.getElementById('wirelessFilter');
+        const sortSelect = document.getElementById('sortSelect');
+
+        function renderProducts(list) {
+            grid.innerHTML = list.map(p => `
+        <div class='product-card'>
+          ${p.tagLeft ? `<div class='badge badge-left'>${p.tagLeft}</div>` : ''}
+          ${p.tagRight ? `<div class='badge badge-right'>${p.tagRight}</div>` : ''}
+          <img src='${p.img}' alt='${p.title}'>
+          <div class='product-info'>
+            <div class='category-tag'>${p.category}</div>
+            <h4>${p.title}</h4>
+            <p>${p.desc}</p>
+            <div class='stars'>
+            <img src='/images/star.png' alt='rating' class='star-icon'>
+            <img src='/images/star.png' alt='rating' class='star-icon'>
+            <img src='/images/star.png' alt='rating' class='star-icon'>
+            <img src='/images/star.png' alt='rating' class='star-icon'>
+            <img src='/images/star.png' alt='rating' class='star-icon'>
+            <span style='color:#94a3b8'>(${p.stars})</span>
+            </div>
+            <div class='features'>${p.features.map(f => `<span>${f}</span>`).join('')}</div>
+            <div class='price'>₹${p.price.toLocaleString()} <span class='old-price'>₹${p.old.toLocaleString()}</span></div>
+            <div class='buttons-details'><div class='btn1 btn-view'>View Details</div><div class='btn1 btn-cart'>Add to Cart</div></div>
+          </div>
+        </div>`).join('');
+        }
+
+        function filterProducts() {
+            const maxPrice = parseInt(range.value);
+            const selectedCats = Array.from(catFilters).filter(f => f.checked).map(f => f.value);
+            const selectedBrands = Array.from(brandFilters).filter(f => f.checked).map(f => f.value);
+            const selectedCompats = Array.from(compatFilters).filter(f => f.checked).map(f => f.value);
+            const wirelessOnly = wirelessFilter.checked;
+
+            let filtered = products.filter(p => p.price <= maxPrice);
+
+            if (selectedCats.length) filtered = filtered.filter(p => selectedCats.includes(p.category));
+            if (selectedBrands.length) filtered = filtered.filter(p => selectedBrands.includes(p.brand));
+            if (selectedCompats.length) filtered = filtered.filter(p => selectedCompats.some(c => p.compatibility.includes(c)));
+            if (wirelessOnly) filtered = filtered.filter(p => p.wireless);
+
+            const sort = sortSelect.value;
+            if (sort === 'low') filtered.sort((a, b) => a.price - b.price);
+            if (sort === 'high') filtered.sort((a, b) => b.price - a.price);
+
+            renderProducts(filtered);
+        }
+
+        range.addEventListener('input', filterProducts);
+        catFilters.forEach(f => f.addEventListener('change', filterProducts));
+        brandFilters.forEach(f => f.addEventListener('change', filterProducts));
+        compatFilters.forEach(f => f.addEventListener('change', filterProducts));
+        wirelessFilter.addEventListener('change', filterProducts);
+        sortSelect.addEventListener('change', filterProducts);
+
+        renderProducts(products);
+    </script>
+</body>
+
+</html>

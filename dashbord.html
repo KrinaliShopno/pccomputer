@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Buyerzone CRM — Dashboard (Fixed 1440px)</title>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #071323;
+      --muted: #9fb3c9;
+      --card-radius: 16px;
+      --accent-green: #00ff84;
+      --accent-blue: #38a3ff;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      background: linear-gradient(180deg, #041223, #071427);
+      color: #e8f7ff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* center the fixed layout */
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 18px 0;
+    }
+
+    /* container fixed width like screenshot */
+    .container {
+      display: grid;
+      grid-template-columns: 84px 420px minmax(680px, 1fr) 350px;
+      grid-template-rows: 80px auto;
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      column-gap: 26px;
+      row-gap: 26px;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: linear-gradient(180deg, #061226, #05101a);
+      border-radius: 12px;
+      padding: 18px 10px;
+      height: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      position: sticky;
+      top: 18px;
+      grid-row: 1 / span 2;
+    }
+
+    /* brand */
+    .brand {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #32d3a6, #1fa3ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #012026;
+    }
+
+    /* nav */
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav button {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: .18s;
+    }
+
+    .nav button.active {
+      background: linear-gradient(180deg, #0f3e74, #0f2e56);
+      color: white;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    /* MAIN HEADER (use spans across columns 2..4) */
+    .header {
+      grid-column: 2 / 5;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    .time {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .search {
+      flex: 1;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      padding: 10px 16px;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #cfe9ff;
+      width: 100%;
+    }
+
+    .brand-label {
+      color: #40b8ff;
+      font-weight: 800;
+    }
+
+    /* LEFT COLUMN (380px) */
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* card baseline */
+    .card {
+      border-radius: 18px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.006));
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+    }
+
+    .follow-card {
+      border-radius: 18px;
+      padding: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    /* Upcoming card specifics */
+    .follow-card.upcoming {
+      background: linear-gradient(180deg, #0f2544, #0a1627);
+      border: 1px solid rgba(34, 86, 123, 0.12);
+    }
+
+    .follow-card.due {
+      background: linear-gradient(180deg, #361820, #221015);
+      border: 1px solid rgba(120, 30, 30, 0.12);
+    }
+
+    /* header inside cards */
+    .follow-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .follow-header h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #eaf6ff;
+    }
+
+    .count-tag {
+      padding: 6px 12px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #123f68, #0c2c4d);
+      color: #9ecaff;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .count-tag.red {
+      background: linear-gradient(180deg, #7a1f23, #4b1317);
+      color: #ffdede;
+    }
+
+    /* follow items design */
+    .follow-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .follow-item {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.008));
+      border-radius: 12px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      transition: transform .18s, box-shadow .18s;
+    }
+
+    .follow-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 48px rgba(2, 6, 23, 0.5);
+    }
+
+    /* left text */
+    .follow-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 180px;
+    }
+
+    .follow-left .name {
+      font-weight: 800;
+      color: #e8f7ff;
+    }
+
+    .follow-left .company {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* right time + pill */
+    .follow-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      white-space: nowrap;
+      min-width: 80px;
+    }
+
+    .follow-right .time {
+      color: #bcd0e0;
+      font-weight: 700;
+    }
+
+    .pill {
+      padding: 6px 10px;
+      border-radius: 12px;
+      font-weight: 800;
+      color: white;
+      font-size: 12px;
+    }
+
+    .pill.high {
+      background: linear-gradient(90deg, #ff6b73, #e94b58);
+    }
+
+    .pill.med {
+      background: linear-gradient(90deg, #f7b25b, #d07b12);
+    }
+
+    /* view all link */
+    .view-all {
+      margin-top: 6px;
+      color: #77caff;
+      text-decoration: underline;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    /* CENTER (revenue + pipeline) */
+    .center-col {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* revenue card */
+    .revenue {
+      padding: 22px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #08363a, #072926);
+      border: 1px solid rgba(12, 150, 111, 0.05);
+    }
+
+    .revenue h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #dffef5;
+      margin: 0;
+    }
+
+    .rev-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .rev-value {
+      font-size: 32px;
+      font-weight: 900;
+      margin-top: 8px;
+      color: #e8fff0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .rev-pct {
+      color: var(--accent-green);
+      font-weight: 900;
+    }
+
+    .rev-tabs {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+
+    .rev-tabs button {
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      background: transparent;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .rev-tabs button.active {
+      background: linear-gradient(180deg, #0f8a50, #0b6e3f);
+      color: white;
+      border: none;
+    }
+
+    /* chart box */
+    .chart-box {
+      margin-top: 12px;
+      background: transparent;
+      padding: 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    #revenueChart {
+      width: 100%;
+      height: 220px;
+      display: block;
+    }
+
+    /* legend small */
+    .legend {
+      margin-top: 10px;
+      color: #a1cfc0;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* pipeline */
+    .pipeline {
+      padding: 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #0b2033, #081727);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .pipeline h3 {
+      font-size: 18px;
+      margin: 0 0 12px 0;
+      font-weight: 800;
+      color: #eaf6ff;
+    }
+
+    .pipeline .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent);
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      margin-bottom: 12px;
+    }
+
+    .step {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: white;
+      margin-right: 12px;
+    }
+
+    .step.blue {
+      background: linear-gradient(180deg, #2a9fff, #0c63ff);
+    }
+
+    .step.cyan {
+      background: linear-gradient(180deg, #2fe4d9, #12bba9);
+    }
+
+    .step.purple {
+      background: linear-gradient(180deg, #b36aff, #8c36d9);
+    }
+
+    .step.orange {
+      background: linear-gradient(180deg, #ff8a3b, #d96212);
+    }
+
+    .step.green {
+      background: linear-gradient(180deg, #20d07a, #147646);
+    }
+
+    .p-title {
+      font-weight: 800;
+      color: #e7f7ff;
+    }
+
+    .p-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* RIGHT COL stat boxes */
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.004));
+      min-height: 92px;
+    }
+
+    .stat h4 {
+      margin: 0;
+      font-weight: 800;
+    }
+
+    .big {
+      font-size: 28px;
+      font-weight: 900;
+      margin-top: 8px;
+    }
+
+    .muted {
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: 13px;
+    }
+
+    .stat.blue {
+      background: linear-gradient(180deg, #0d2b4a, #071520);
+      border: 1px solid rgba(36, 142, 255, 0.06);
+    }
+
+    .stat.brown {
+      background: linear-gradient(180deg, #301a1a, #150c0c);
+      border: 1px solid rgba(220, 120, 80, 0.06);
+    }
+
+    .stat.green {
+      background: linear-gradient(180deg, #0f2d27, #081815);
+      border: 1px solid rgba(60, 190, 150, 0.06);
+    }
+
+    .stat.purple {
+      background: linear-gradient(180deg, #1c0d23, #13091a);
+      border: 1px solid rgba(140, 80, 210, 0.06);
+    }
+
+    .stat.red {
+      background: linear-gradient(180deg, #320e14, #18070a);
+      border: 1px solid rgba(255, 80, 80, 0.06);
+    }
+
+    /* small dot */
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-left: 6px;
+    }
+
+    /* responsive fallback small screens */
+    @media (max-width:1400px) {
+      .container {
+        transform: scale(0.95);
+        transform-origin: top center;
+      }
+    }
+
+    @media (max-width:1100px) {
+      .container {
+        width: 100%;
+        grid-template-columns: 84px 1fr;
+        padding: 0 12px;
+      }
+
+      .header {
+        grid-column: 2/3;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="container">
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar" aria-label="Sidebar">
+        <div class="brand">BZ</div>
+        <nav class="nav" aria-label="Main">
+          <button class="active" title="Dashboard">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <rect x="3" y="3" width="7" height="7" rx="1.4" />
+              <rect x="14" y="3" width="7" height="7" rx="1.4" />
+              <rect x="14" y="14" width="7" height="7" rx="1.4" />
+              <rect x="3" y="14" width="7" height="7" rx="1.4" />
+            </svg>
+          </button>
+          <button title="Leads">    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+         stroke="#c9d5e2" stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+</button>
+          <button title="Light"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="#c9d5e2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg></button>
+          <button title="Settings">        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="#c9d5e2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 
+                   2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 
+                   1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 
+                   1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 
+                   2 0 1 1-2.83-2.83l.06-.06c.46-.46.6-1.14.33-1.82a1.65 
+                   1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 
+                   0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 
+                   2 0 1 1 2.83-2.83l.06.06c.46.46 1.14.6 1.82.33h.09a1.65 
+                   1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 
+                   1.65 0 0 0 1 1.51h.09c.68.27 1.36.13 1.82-.33l.06-.06a2 
+                   2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 
+                   1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+</button>
+          <button title="Sync"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="#c9d5e2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg></button>
+      
+          <button title="Support"> <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="#c9d5e2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 13v-1A8 8 0 1 0 4 12v1"/>
+          <path d="M4 13v3a2 2 0 0 0 2 2h1"/>
+          <path d="M20 13v3a2 2 0 0 1-2 2h-1"/>
+          <path d="M12 19v2"/>
+        </svg></button>
+        </nav>
+      </aside>
+
+      <!-- HEADER (span columns 2..4) -->
+      <header class="header" role="banner">
+        <div class="time">11:54 AM | Monday, December 1, 2025</div>
+        <div class="search" role="search" aria-label="Search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)"
+            stroke-width="1.8">
+            <circle cx="11" cy="11" r="6"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input placeholder="Search Leads, Clients, Numbers..." aria-label="Search" />
+        </div>
+        <div class="brand-label">BUYERZONE</div>
+      </header>
+
+      <!-- LEFT COLUMN -->
+      <section class="left-col">
+        <div class="follow-card upcoming">
+          <div class="follow-header">
+            <h3>Upcoming Follow-ups</h3>
+            <div class="count-tag">47 Total</div>
+          </div>
+
+          <div class="follow-list">
+            <div class="follow-item">
+              <div class="follow-left">
+                <div class="name">Sarah Mitchell</div>
+                <div class="company">TechCorp Inc.</div>
+              </div>
+              <div class="follow-right">
+                <div class="time">10:30 AM</div>
+                <div class="pill high">HIGH</div>
+              </div>
+            </div>
+
+            <div class="follow-item">
+              <div class="follow-left">
+                <div class="name">David Zhang</div>
+                <div class="company">Global Dynamics</div>
+              </div>
+              <div class="follow-right">
+                <div class="time">11:45 AM</div>
+                <div class="pill med">MEDIUM</div>
+              </div>
+            </div>
+
+            <div class="follow-item">
+              <div class="follow-left">
+                <div class="name">Emma Rodriguez</div>
+                <div class="company">Innovate Solutions</div>
+              </div>
+              <div class="follow-right">
+                <div class="time">2:00 PM</div>
+                <div class="pill high">HIGH</div>
+              </div>
+            </div>
+          </div>
+
+          <a class="view-all" href="#">View All Upcoming Follow-ups</a>
+        </div>
+
+        <div class="follow-card due">
+          <div class="follow-header">
+            <h3>Due Follow-ups</h3>
+            <div class="count-tag red">23 Total</div>
+          </div>
+
+          <div class="follow-list">
+            <div class="follow-item">
+              <div class="follow-left">
+                <div class="name">Robert Johnson</div>
+                <div class="company">Stellar Corp</div>
+              </div>
+              <div class="follow-right">
+                <div class="time">Yesterday</div>
+                <div class="pill high">HIGH</div>
+              </div>
+            </div>
+
+            <div class="follow-item">
+              <div class="follow-left">
+                <div class="name">Jennifer Lee</div>
+                <div class="company">BlueSky Ltd</div>
+              </div>
+              <div class="follow-right">
+                <div class="time">2 days ago</div>
+                <div class="pill high">HIGH</div>
+              </div>
+            </div>
+
+            <div class="follow-item">
+              <div class="follow-left">
+                <div class="name">Kevin Park</div>
+                <div class="company">Nova Systems</div>
+              </div>
+              <div class="follow-right">
+                <div class="time">3 days ago</div>
+                <div class="pill med">MEDIUM</div>
+              </div>
+            </div>
+          </div>
+
+          <a class="view-all" href="#">View All Due Follow-ups</a>
+        </div>
+      </section>
+
+      <!-- CENTER COLUMN -->
+      <main class="center-col">
+        <div class="revenue card">
+          <div class="rev-top">
+            <div>
+              <h3>Total Revenue Growth</h3>
+              <div class="rev-value">$2.4M <div class="rev-pct">+34.7%</div>
+              </div>
+            </div>
+            <div class="rev-tabs">
+              <button>Day</button>
+              <button>Week</button>
+              <button class="active">Month</button>
+            </div>
+          </div>
+
+          <div class="chart-box">
+            <canvas id="revenueChart"></canvas>
+          </div>
+
+          <div class="legend"><span class="dot"
+              style="background:var(--accent-green);width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:8px;"></span>Revenue
+            Growth</div>
+        </div>
+
+        <div class="pipeline card">
+          <h3 style="margin-bottom:12px;">Pipeline Overview</h3>
+
+          <div class="row">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div class="step blue">1</div>
+              <div>
+                <div class="p-title">New Leads</div>
+                <div class="p-sub">Top of funnel</div>
+              </div>
+            </div>
+            <div style="color:#78c7ff;font-weight:900;">342</div>
+          </div>
+
+          <div class="row">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div class="step cyan">2</div>
+              <div>
+                <div class="p-title">Qualified</div>
+                <div class="p-sub">Contacted & verified</div>
+              </div>
+            </div>
+            <div style="color:#4ff0d0;font-weight:900;">256</div>
+          </div>
+
+          <div class="row">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div class="step purple">3</div>
+              <div>
+                <div class="p-title">Proposal Sent</div>
+                <div class="p-sub">Waiting for reply</div>
+              </div>
+            </div>
+            <div style="color:#c88cff;font-weight:900;">187</div>
+          </div>
+
+          <div class="row">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div class="step orange">4</div>
+              <div>
+                <div class="p-title">Negotiation</div>
+                <div class="p-sub">Price discussions</div>
+              </div>
+            </div>
+            <div style="color:#ffb36e;font-weight:900;">124</div>
+          </div>
+
+          <div class="row">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div class="step green">5</div>
+              <div>
+                <div class="p-title">Closed Won</div>
+                <div class="p-sub">Completed deals</div>
+              </div>
+            </div>
+            <div style="color:#7ee4a5;font-weight:900;">94</div>
+          </div>
+        </div>
+      </main>
+
+      <!-- RIGHT COLUMN -->
+      <aside class="right-col">
+        <div class="stat blue">
+          <h4>Active Leads <span style="float:right;color:#6fb3ff;">●</span></h4>
+          <div class="big">892</div>
+          <div class="muted">↑ High engagement</div>
+        </div>
+
+        <div class="stat brown">
+          <h4>Pending Leads <span style="float:right;color:#ff8a3b;">●</span></h4>
+          <div class="big">342</div>
+          <div class="muted">• Awaiting response</div>
+        </div>
+
+        <div class="stat green">
+          <h4>Month Total <span style="float:right;color:#2dd07a;">●</span></h4>
+          <div class="big">2,847</div>
+          <div class="muted">↑ +12% vs last month</div>
+        </div>
+
+        <div class="stat green">
+          <h4>Won Leads <span style="float:right;color:#1be17b;">●</span></h4>
+          <div class="big">284</div>
+          <div class="muted">↑ +18% this month</div>
+        </div>
+
+        <div class="stat purple">
+          <h4>Quotations <span style="float:right;color:#6fb3ff;">●</span></h4>
+          <div class="big">156</div>
+          <div class="muted">• 42 pending approval</div>
+        </div>
+
+        <div class="stat red">
+          <h4>Lost Leads <span style="float:right;color:#ff5562;">●</span></h4>
+          <div class="big">156</div>
+          <div class="muted">↓ Needs attention</div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <script>
+    /* Chart initialization after DOM ready */
+    document.addEventListener('DOMContentLoaded', function () {
+      const canvas = document.getElementById('revenueChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      // gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, 220);
+      gradient.addColorStop(0, '#30ffb7');
+      gradient.addColorStop(1, '#0ea86a');
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{
+            data: [60, 72, 90, 78, 102, 115],
+            backgroundColor: gradient,
+            borderRadius: 12,
+            barThickness: 44
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#9fb3c9', padding: 12, font: { size: 13, weight: '700' } } },
+            y: { display: false }
+          },
+          animation: { duration: 900, easing: 'easeOutQuart' }
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>
