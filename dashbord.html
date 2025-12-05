@@ -16,8 +16,7 @@
       --bg: #071323;
       --muted: #9fb3c9;
       --card-radius: 16px;
-      --accent-green: #00ff84;
-      --accent-blue: #38a3ff;
+  
     }
 
     * {
@@ -41,8 +40,8 @@
       padding: 18px 0;
     }
 
-    /* container fixed width like screenshot */
-    .container {
+    /* main-dashboard fixed width like screenshot */
+    .main-dashboard {
       display: grid;
       grid-template-columns: 84px 420px minmax(680px, 1fr) 350px;
       grid-template-rows: 80px auto;
@@ -88,6 +87,7 @@
       flex-direction: column;
       gap: 12px;
       width: 100%;
+      height: 100%;
       align-items: center;
     }
 
@@ -333,7 +333,7 @@
     }
 
     .rev-pct {
-      color: var(--accent-green);
+      color: #00ff84;
       font-weight: 900;
     }
 
@@ -519,14 +519,14 @@
 
     /* responsive fallback small screens */
     @media (max-width:1400px) {
-      .container {
+      .main-dashboard {
         transform: scale(0.95);
         transform-origin: top center;
       }
     }
 
     @media (max-width:1100px) {
-      .container {
+      .main-dashboard {
         width: 100%;
         grid-template-columns: 84px 1fr;
         padding: 0 12px;
@@ -536,12 +536,241 @@
         grid-column: 2/3;
       }
     }
+
+    /* ================================
+      RESPONSIVE IMPROVEMENTS
+================================ */
+
+/* ----- 1280px (Laptop) ----- */
+@media (max-width:1280px) {
+  .main-dashboard {
+    grid-template-columns: 70px 350px 1fr 260px;
+    transform: scale(0.96);
+    transform-origin: top center;
+  }
+
+  .rev-value { font-size: 28px; }
+  .big { font-size: 24px; }
+}
+
+/* ----- 1024px (Tablet landscape) ----- */
+@media (max-width:1024px) {
+  .main-dashboard {
+    grid-template-columns: 70px 1fr;
+    grid-template-rows: auto auto auto;
+    column-gap: 18px;
+    row-gap: 18px;
+    padding: 0 14px;
+  }
+
+  /* sidebar becomes small vertical strip */
+  .sidebar {
+    width: 60px;
+    padding: 12px 6px;
+  }
+
+  .header {
+    grid-column: 2 / 3;
+  }
+
+  .left-col,
+  .center-col,
+  .right-col {
+    grid-column: 2 / 3;
+  }
+
+  .right-col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* ----- 768px (Tablet Portrait) ----- */
+@media (max-width:768px) {
+  .wrapper {
+    padding: 10px;
+  }
+
+  .main-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .nav button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .header {
+    grid-column: 1 / 2;
+  }
+
+  .left-col,
+  .center-col,
+  .right-col {
+    grid-column: 1 / 2;
+  }
+
+  .right-col {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----- 540px (Large Mobile) ----- */
+@media (max-width:540px) {
+
+  .header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .rev-value {
+    font-size: 24px;
+  }
+
+  .big {
+    font-size: 22px;
+  }
+
+  .pipeline .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
+/* ----- 420px (Small Mobile) ----- */
+@media (max-width:420px) {
+  .brand {
+    width: 40px;
+    height: 40px;
+  }
+ .mobile-toggle {
+    display: block;
+    margin-left: auto;
+  }
+  .nav button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .rev-tabs button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .follow-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .follow-right {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .chart-box {
+    padding: 4px;
+  }
+}
+/* Hamburger button hidden on desktop */
+.mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 26px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Mobile sidebar hidden by default */
+@media (max-width:768px) {
+
+  .mobile-toggle {
+    /* display: block; */
+    margin-left: auto;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -240px;   /* hidden */
+    height: 100vh;
+    width: 200px;
+    background: #05101a;
+    padding-top: 20px;
+    z-index: 999;
+    transition: 0.3s ease;
+    box-shadow: 4px 0 18px rgba(0,0,0,0.4);
+    border-radius: 0;
+  }
+
+  .sidebar.open {
+    left: 0;     
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+
+}
+@media (max-width:425px) {
+
+  /* Show only logo(toggle) + BUYERZONE */
+  .header .time,
+  .header .search {
+    display: none !important;
+  }
+
+  /* Show toggle in mobile */
+  .mobile-toggle {
+    display: block;
+    position: absolute;
+    right: 16px;
+    top: 14px;
+    font-size: 26px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* Clean mobile header layout */
+  .header {
+    position: relative;
+    width: 100%;
+    padding: 16px 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* CENTER BUYERZONE TEXT */
+  .brand-label {
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0 auto;
+  }
+}
   </style>
 </head>
 
 <body>
   <div class="wrapper">
-    <div class="container">
+    <div class="main-dashboard">
 
       <!-- SIDEBAR -->
       <aside class="sidebar" aria-label="Sidebar">
@@ -615,6 +844,28 @@
         </div>
         <div class="brand-label">BUYERZONE</div>
       </header>
+<header class="header" role="banner">
+
+  <!-- Time (desktop only, mobile hidden) -->
+  <div class="time">11:54 AM | Monday, December 1, 2025</div>
+
+  <!-- Toggle Menu (mobile only) -->
+  <button class="mobile-toggle" id="menuToggle">☰</button>
+
+  <!-- Search (desktop only, mobile hidden) -->
+  <div class="search" role="search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1.8">
+      <circle cx="11" cy="11" r="6"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <input placeholder="Search Leads, Clients, Numbers..." />
+  </div>
+
+  <!-- BUYERZONE (Always shown) -->
+  <div class="brand-label">BUYERZONE</div>
+  
+</header>
+
 
       <!-- LEFT COLUMN -->
       <section class="left-col">
@@ -728,7 +979,7 @@
           </div>
 
           <div class="legend"><span class="dot"
-              style="background:var(--accent-green);width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:8px;"></span>Revenue
+              style="background:#00ff84;width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:8px;"></span>Revenue
             Growth</div>
         </div>
 
@@ -869,6 +1120,28 @@
       });
     });
   </script>
+<script>
+document.getElementById("menuToggle").addEventListener("click", function () {
+  const sidebar = document.querySelector(".sidebar");
+
+  // Toggle sidebar class
+  sidebar.classList.toggle("open");
+
+  // Add/remove overlay
+  if (sidebar.classList.contains("open")) {
+    const overlay = document.createElement("div");
+    overlay.className = "overlay";
+    overlay.onclick = () => {
+      sidebar.classList.remove("open");
+      overlay.remove();
+    };
+    document.body.appendChild(overlay);
+  } else {
+    const overlay = document.querySelector(".overlay");
+    if (overlay) overlay.remove();
+  }
+});
+</script>
 
 </body>
 

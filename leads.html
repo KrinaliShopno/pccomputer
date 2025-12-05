@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BuyerZone Lead Manager — Final</title>
+<style>
+  :root{
+    --bg:#071323;
+    --panel-grad: linear-gradient(180deg,#061226,#05101a);
+    --muted:#9fb3c9;
+    --text:#dff3ff;
+    --accent:#40b8ff;
+    --glass: rgba(255,255,255,0.02);
+    --glass-border: rgba(255,255,255,0.03);
+    --card-shadow: rgba(2,6,23,0.55);
+    --hot:#ff6b73;
+    --amount-green:#2fffa1;
+    --loc-red:#ff4d4d;
+    --btn-green:#0f8b5a; /* action button background (green) */
+    --btn-blue:#2f64ff;  /* copy button background (blue) */
+  }
+
+  *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#041427);color:var(--text);-webkit-font-smoothing:antialiased}
+  .app{display:grid;grid-template-columns:84px 1fr;grid-template-rows:auto 1fr;min-height:100vh}
+
+/* SIDEBAR */
+  .sidebar{
+    grid-row:1/span 2;
+    background:var(--panel-grad);
+    padding:20px 12px;
+    border-right:1px solid rgba(255,255,255,0.03);
+    display:flex;flex-direction:column;align-items:center;gap:14px;position:sticky;top:0;height:100vh;z-index:30;
+  }
+  .brand{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#32d3a6,#1fa3ff);display:flex;align-items:center;justify-content:center;font-weight:800;color:#012026}
+  .nav{display:flex;flex-direction:column;gap:12px;width:100%;align-items:center}
+  .nav button{width:56px;height:56px;border-radius:12px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.16s}
+  .nav button svg{stroke:#c9d5e2}
+  .nav button.active{background:linear-gradient(180deg,#0f3e74,#0f2e56);box-shadow:0 14px 30px rgba(0,0,0,0.45)}
+  .nav button.active svg{stroke:#fff}
+  .spacer{flex:1}
+
+/* HEADER */
+  .header{
+    grid-column:2/3;
+    display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid rgba(255,255,255,0.02);
+    position:sticky;top:0;background:transparent;z-index:20;flex-wrap:wrap;justify-content:space-between;
+  }
+  .time{min-width:220px;color:var(--muted);font-weight:700}
+  .search{flex:1;max-width:700px;display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:40px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid var(--glass-border)}
+  .search input{background:transparent;border:none;outline:none;color:#cfe9ff;width:100%;font-size:14px}
+  .brand-label{font-weight:800;color:var(--accent);margin-left:12px}
+  .header-controls{display:flex;align-items:center;gap:10px;margin-left:auto}
+  .chip{padding:8px 12px;border-radius:10px;background:var(--glass);border:1px solid var(--glass-border);color:var(--muted);font-weight:700}
+  .btn.primary{padding:10px 14px;border-radius:10px;background:linear-gradient(180deg,#2f8bff,#2f64ff);border:none;color:white;display:inline-flex;align-items:center;gap:8px;font-weight:700;cursor:pointer;box-shadow:0 10px 30px rgba(47,100,255,0.12)}
+  .icon-btn{width:44px;height:44px;border-radius:10px;background:var(--glass);border:1px solid var(--glass-border);display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .icon-btn svg{stroke:#c9d5e2}
+
+/* PAGE / BOARD */
+  .page{grid-column:2/3;padding:20px;overflow:auto;height:calc(100vh - 86px)}
+  .board{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;align-items:start}
+  .col{background:linear-gradient(180deg, rgba(255,255,255,0.008), rgba(255,255,255,0.006));padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  .col-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-weight:800;color:#eaf6ff}
+  .col-title .count{padding:6px 10px;border-radius:12px;background:rgba(255,255,255,0.03);color:var(--muted);font-weight:700}
+
+/* COMPACT CARD STYLE */
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.016), rgba(255,255,255,0.006));border-radius:12px;padding:12px;margin-bottom:14px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 18px 40px var(--card-shadow)}
+  .top{display:flex;gap:12px;align-items:flex-start}
+  .initial{width:38px;height:38px;border-radius:10px;background:linear-gradient(180deg,#2b7bff,#145bb0);display:flex;align-items:center;justify-content:center;font-weight:800;color:white}
+  .name{font-weight:800;color:#e8f7ff;font-size:15px;display:block}
+  .company{font-size:13px;color:var(--muted);margin:4px 0 8px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;font-size:13px;color:var(--muted);align-items:center}
+  .amount{margin-left:auto;color:var(--amount-green);font-weight:900}
+  .badge{font-size:11px;padding:4px 8px;border-radius:6px;font-weight:900;color:white}
+  .badge.hot{background:linear-gradient(90deg,var(--hot),#e94b58)}
+  .badge.normal{background:linear-gradient(90deg,#6da8ff,#3b7aff)}
+
+/* OWNER */
+  .owner{display:flex;align-items:center;gap:8px;margin-top:10px;color:var(--muted);font-size:13px}
+  .owner .dot{width:26px;height:26px;border-radius:50%;background:linear-gradient(90deg,#8b5bff,#c689ff);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:12px}
+
+/* ACTION BUTTONS (exact screenshot colors) */
+  .actions{display:flex;gap:8px;margin-top:12px}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:8px 12px;border-radius:999px;border:none;cursor:pointer;font-weight:700;min-width:44px;height:36px}
+  .action-btn .icon-wrap{width:20px;height:20px;display:flex;align-items:center;justify-content:center}
+  /* green buttons (call / whatsapp) */
+  .action-btn.green{background:var(--btn-green);color:#fff;box-shadow:0 6px 18px rgba(15,139,90,0.12)}
+  .action-btn.green svg{stroke:#ffffff}
+  /* copy button blue */
+  .action-btn.blue{background:var(--btn-blue);color:#fff;box-shadow:0 6px 18px rgba(47,100,255,0.12)}
+  .action-btn.blue svg{stroke:#ffffff}
+
+/* small icon-only buttons (if needed) */
+  .action-icon{width:36px;height:36px;border-radius:8px;background:var(--glass);display:flex;align-items:center;justify-content:center;border:1px solid var(--glass-border)}
+
+/* RESPONSIVE */
+  @media (max-width:1200px){ .board{grid-template-columns:repeat(3,1fr)} .search{max-width:420px} }
+  @media (max-width:900px){ .board{grid-template-columns:repeat(2,1fr)} .search{max-width:360px} }
+  @media (max-width:600px){ .board{grid-template-columns:1fr} .page{padding:14px} .search{max-width:100%} }
+
+  @media (max-width:425px){
+    .app{grid-template-columns:1fr}
+    .sidebar{position:fixed;left:-260px;width:200px;height:100vh;transition:left .28s ease;z-index:90}
+    .sidebar.open{left:0}
+    .header{flex-direction:column;align-items:center;padding:12px}
+    .time,.search,.header-controls{display:none!important}
+    .mobile-toggle{display:block;position:absolute;right:14px;top:12px;font-size:28px;background:none;border:none;color:var(--text);z-index:1100}
+    .brand-label{font-size:16px}
+    .page{padding:12px;height:calc(100vh - 120px)}
+    .board{grid-template-columns:1fr}
+  }
+
+  /* small fixes */
+  .header > *{margin-top:4px;margin-bottom:4px}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;z-index:85}
+  .overlay.show{display:block}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar" aria-label="Sidebar">
+    <div class="brand">BZ</div>
+    <nav class="nav" aria-label="Main navigation">
+      <button class="active" title="Dashboard" aria-label="Dashboard">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <rect x="3" y="3" width="7" height="7" rx="1.4"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1.4"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1.4"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1.4"></rect>
+        </svg>
+      </button>
+
+      <button title="Leads" aria-label="Leads">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9d5e2" stroke-width="1.6" stroke-linecap="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </button>
+
+      <button title="Light" aria-label="Light">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9d5e2" stroke-width="1.6">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+      </button>
+
+      <button title="Settings" aria-label="Settings">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9d5e2" stroke-width="1.6">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06c.46-.46.6-1.14.33-1.82a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06c.46.46 1.14.6 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09c.68.27 1.36.13 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+
+      <button title="Sync" aria-label="Sync">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9d5e2" stroke-width="1.6">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path d="M3.51 9A9 9 0 0 1 20.49 4M20.49 15A9 9 0 0 1 3.51 20"></path>
+        </svg>
+      </button>
+
+      <button title="Profile" aria-label="Profile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9d5e2" stroke-width="1.6">
+          <circle cx="12" cy="7" r="4"></circle>
+          <path d="M5.5 21a6.5 6.5 0 0 1 13 0"></path>
+        </svg>
+      </button>
+
+      <div class="spacer"></div>
+
+      <button title="Support" aria-label="Support">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c9d5e2" stroke-width="1.6">
+          <path d="M3 10a9 9 0 0 1 18 0v4"></path>
+          <path d="M21 16a2 2 0 0 1-2 2h-2v-6h2a2 2 0 0 1 2 2z"></path>
+          <path d="M3 16a2 2 0 0 0 2 2h2v-6H5a2 2 0 0 0-2 2z"></path>
+        </svg>
+      </button>
+
+    </nav>
+  </aside>
+
+  <!-- HEADER -->
+  <header class="header" role="banner">
+    <div class="time">11:54 AM | Monday, December 1, 2025</div>
+
+    <button id="menuToggle" class="mobile-toggle" aria-label="Open menu" style="display:none">☰</button>
+
+    <div class="search" role="search" aria-label="Search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1.6"><circle cx="11" cy="11" r="6"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input placeholder="Search Leads, Clients, Numbers..." aria-label="Search input">
+    </div>
+
+    <div class="brand-label">BuyerZone Lead Manager</div>
+
+    <div class="header-controls" role="toolbar" aria-label="Header actions">
+      <div class="chip">Kanban View</div>
+      <div class="chip">Lost Leads (5)</div>
+
+      <button class="btn primary" title="Add Lead">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Lead
+      </button>
+
+      <button class="icon-btn" title="Board type">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9d5e2" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1.4"/><rect x="14" y="3" width="7" height="7" rx="1.4"/><rect x="14" y="14" width="7" height="7" rx="1.4"/><rect x="3" y="14" width="7" height="7" rx="1.4"/></svg>
+      </button>
+
+      <button class="icon-btn" title="Refresh">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9d5e2" stroke-width="1.6"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9A9 9 0 0 1 20.49 4M20.49 15A9 9 0 0 1 3.51 20"/></svg>
+      </button>
+
+      <button class="icon-btn" title="Export">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9d5e2" stroke-width="1.6"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><polyline points="7 9 12 4 17 9"/><line x1="12" y1="4" x2="12" y2="16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN PAGE -->
+  <main class="page" role="main">
+    <section class="board" aria-label="Lead board">
+
+      <!-- NEW LEADS -->
+      <div class="col" aria-label="New Leads">
+        <div class="col-title"><span>New Leads</span><span class="count">4</span></div>
+
+        <!-- CARD: Rajesh -->
+        <article class="card" aria-label="Lead Rajesh Kumar">
+          <div class="top">
+            <div class="initial">RK</div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:flex-start;gap:8px">
+                <div style="flex:1">
+                  <div class="name">Rajesh Kumar <span class="badge hot" style="float:right">HOT</span></div>
+                  <div class="company">TechVision Solutions</div>
+                </div>
+                <div style="margin-left:8px" class="amount">₹250K</div>
+              </div>
+
+              <div class="meta" style="margin-top:8px">
+                <!-- location red -->
+                <div style="display:inline-flex;align-items:center;gap:8px;margin-right:12px">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--loc-red)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10z"></path>
+                    <circle cx="12" cy="11" r="2"></circle>
+                  </svg>
+                  Mumbai, Maharashtra
+                </div>
+
+                <!-- phone white -->
+                <div style="display:inline-flex;align-items:center;gap:8px;margin-right:12px;color:#cfe9ff">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.12 2h3a2 2 0 0 1 2 1.72c.12.81.37 1.6.72 2.35a2 2 0 0 1-.45 2.11L8 9a16 16 0 0 0 7 7l.82-1.5a2 2 0 0 1 2.11-.45c.75.35 1.54.6 2.35.72A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                  +91 98765 43210
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="owner"><div class="dot">PS</div> Priya Sharma</div>
+
+          <div class="actions">
+            <!-- CALL (green) -->
+            <button class="action-btn green" title="Call">
+              <span class="icon-wrap" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.12 2h3a2 2 0 0 1 2 1.72c.12.81.37 1.6.72 2.35a2 2 0 0 1-.45 2.11L8 9a16 16 0 0 0 7 7l.82-1.5a2 2 0 0 1 2.11-.45c.75.35 1.54.6 2.35.72A2 2 0 0 1 22 16.92z"/></svg>
+              </span>
+              Call
+            </button>
+
+            <!-- WHATSAPP (green) -->
+            <button class="action-btn green" title="WhatsApp">
+              <span class="icon-wrap" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.2 3.8A10 10 0 1 0 23 13l-1.6-1.6A7.9 7.9 0 1 1 18.2 6.8"></path>
+                  <path d="M8.7 14.6c1.1 0 2.2-.4 3-1.2l.7-.7c.2-.2.5-.3.8-.2l1.5.5c.3.1.6 0 .8-.3.4-.6.8-1.7.5-3.1-.1-.6-.5-1.1-1-1.3-.5-.2-1.1-.1-1.6.1-.4.2-1 .7-2 1.7-.7.7-1 1.2-1.2 1.6-.2.4-.3.8-.2 1.1 0 .3.1.5.4.5z"></path>
+                </svg>
+              </span>
+              WhatsApp
+            </button>
+
+            <!-- COPY (blue) -->
+            <button class="action-btn blue" title="Copy">
+              <span class="icon-wrap" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </span>
+              Copy
+            </button>
+          </div>
+        </article>
+
+        <!-- CARD: Sneha (compact) -->
+        <article class="card" aria-label="Lead Sneha Patel">
+          <div class="top">
+            <div class="initial">SP</div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:flex-start;gap:8px">
+                <div style="flex:1">
+                  <div class="name">Sneha Patel <span class="badge normal" style="float:right">NORMAL</span></div>
+                  <div class="company">Digital Innovators</div>
+                </div>
+                <div style="margin-left:8px" class="amount">₹180K</div>
+              </div>
+
+              <div class="meta" style="margin-top:8px">
+                <div style="display:inline-flex;align-items:center;gap:8px;margin-right:12px">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--loc-red)" stroke-width="1.6"><path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10z"></path><circle cx="12" cy="11" r="2"></circle></svg>
+                  Ahmedabad, Gujarat
+                </div>
+                <div style="display:inline-flex;align-items:center;gap:8px;color:#cfe9ff">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.12 2h3a2 2 0 0 1 2 1.72c.12.81.37 1.6.72 2.35a2 2 0 0 1-.45 2.11L8 9a16 16 0 0 0 7 7l.82-1.5a2 2 0 0 1 2.11-.45c.75.35 1.54.6 2.35.72A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                  +91 98765 43211
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="owner"><div class="dot">AS</div> Amit Singh</div>
+
+          <div class="actions">
+            <button class="action-btn green" title="Call">
+              <span class="icon-wrap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 ..."/></svg></span>Call
+            </button>
+            <button class="action-btn green" title="WhatsApp">
+              <span class="icon-wrap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M20.2 3.8A10 10 0 1 0 23 13..."/></svg></span>WhatsApp
+            </button>
+            <button class="action-btn blue" title="Copy">
+              <span class="icon-wrap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="9" y="9" width="13" height="13" rx="2"/></svg></span>Copy
+            </button>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- CONTACTED -->
+      <div class="col" aria-label="Contacted">
+        <div class="col-title"><span>Contacted</span><span class="count">3</span></div>
+
+        <article class="card">
+          <div class="top">
+            <div class="initial">VS</div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:flex-start;gap:8px">
+                <div style="flex:1">
+                  <div class="name">Vikram Shah <span class="badge hot" style="float:right">HOT</span></div>
+                  <div class="company">NextGen Tech</div>
+                </div>
+                <div style="margin-left:8px" class="amount">₹420K</div>
+              </div>
+
+              <div class="meta" style="margin-top:8px">
+                <div style="display:inline-flex;align-items:center;gap:8px;margin-right:12px">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--loc-red)" stroke-width="1.6"><path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10z"></path><circle cx="12" cy="11" r="2"></circle></svg>
+                  Delhi, Delhi
+                </div>
+
+                <div style="display:inline-flex;align-items:center;gap:8px;color:#cfe9ff">
+                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.12 2h3a2 2 0 0 1 2 1.72c.12.81.37 1.6.72 2.35a2 2 0 0 1-.45 2.11L8 9a16 16 0 0 0 7 7l.82-1.5a2 2 0 0 1 2.11-.45c.75.35 1.54.6 2.35.72A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                  +91 98765 43214
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="owner"><div class="dot">PS</div> Priya Sharma</div>
+
+          <div class="actions">
+            <button class="action-btn green" title="Call"><span class="icon-wrap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="..."/></svg></span>Call</button>
+            <button class="action-btn green" title="WhatsApp"><span class="icon-wrap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="..."/></svg></span>WhatsApp</button>
+            <button class="action-btn blue" title="Copy"><span class="icon-wrap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="9" y="9" width="13" height="13" rx="2"/></svg></span>Copy</button>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- QUALIFIED -->
+      <div class="col" aria-label="Qualified">
+        <div class="col-title"><span>Qualified</span><span class="count">4</span></div>
+
+        <article class="card">
+          <div class="top">
+            <div class="initial">DN</div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:flex-start;gap:8px">
+                <div style="flex:1">
+                  <div class="name">Deepa Nair <span class="badge hot" style="float:right">HOT</span></div>
+                  <div class="company">Global Tech Services</div>
+                </div>
+                <div style="margin-left:8px" class="amount">₹380K</div>
+              </div>
+
+              <div class="meta" style="margin-top:8px">
+                <div style="display:inline-flex;align-items:center;gap:8px;margin-right:12px">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--loc-red)" stroke-width="1.6"><path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10z"></path><circle cx="12" cy="11" r="2"></circle></svg>
+                  Pune, Maharashtra
+                </div>
+
+                <div style="display:inline-flex;align-items:center;gap:8px;color:#cfe9ff">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.12 2h3a2 2 0 0 1 2 1.72c.12.81.37 1.6.72 2.35a2 2 0 0 1-.45 2.11L8 9a16 16 0 0 0 7 7l.82-1.5a2 2 0 0 1 2.11-.45c.75.35 1.54.6 2.35.72A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                  +91 98765 43217
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="owner"><div class="dot">PS</div> Priya Sharma</div>
+
+          <div class="actions">
+            <button class="action-btn green" title="Call"> <span class="icon-wrap"><svg width="16" height="16" fill="none" stroke="#fff" stroke-width="1.6"><path d="..."/></svg></span>Call</button>
+            <button class="action-btn green" title="WhatsApp"><span class="icon-wrap"><svg width="16" height="16" fill="none" stroke="#fff" stroke-width="1.6"><path d="..."/></svg></span>WhatsApp</button>
+            <button class="action-btn blue" title="Copy"><span class="icon-wrap"><svg width="16" height="16" fill="none" stroke="#fff" stroke-width="1.6"><rect x="9" y="9" width="13" height="13" rx="2"/></svg></span>Copy</button>
+          </div>
+        </article>
+      </div>
+
+      <!-- PROPOSAL SENT -->
+      <div class="col" aria-label="Proposal Sent">
+        <div class="col-title"><span>Proposal Sent</span><span class="count">3</span></div>
+
+        <article class="card">
+          <div class="top">
+            <div class="initial">PD</div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:flex-start;gap:8px">
+                <div style="flex:1">
+                  <div class="name">Priyanka Desai <span class="badge hot" style="float:right">HOT</span></div>
+                  <div class="company">Enterprise Plus</div>
+                </div>
+                <div style="margin-left:8px" class="amount">₹450K</div>
+              </div>
+
+              <div class="meta" style="margin-top:8px">
+                <div style="display:inline-flex;align-items:center;gap:8px;margin-right:12px">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--loc-red)" stroke-width="1.6"><path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10z"></path><circle cx="12" cy="11" r="2"></circle></svg>
+                  Surat, Gujarat
+                </div>
+
+                <div style="display:inline-flex;align-items:center;gap:8px;color:#cfe9ff">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.12 2h3a2 2 0 0 1 2 1.72c.12.81.37 1.6.72 2.35a2 2 0 0 1-.45 2.11L8 9a16 16 0 0 0 7 7l.82-1.5a2 2 0 0 1 2.11-.45c.75.35 1.54.6 2.35.72A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                  +91 98765 43221
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="owner"><div class="dot">PS</div> Priya Sharma</div>
+
+          <div class="actions">
+            <button class="action-btn green" title="Call"> <span class="icon-wrap"><svg width="16" height="16" fill="none" stroke="#fff" stroke-width="1.6"><path d="..."/></svg></span>Call</button>
+            <button class="action-btn green" title="WhatsApp"><span class="icon-wrap"><svg width="16" height="16" fill="none" stroke="#fff" stroke-width="1.6"><path d="..."/></svg></span>WhatsApp</button>
+            <button class="action-btn blue" title="Copy"><span class="icon-wrap"><svg width="16" height="16" fill="none" stroke="#fff" stroke-width="1.6"><rect x="9" y="9" width="13" height="13" rx="2"/></svg></span>Copy</button>
+          </div>
+        </article>
+      </div>
+
+    </section>
+  </main>
+
+</div>
+
+<div id="overlay" class="overlay" aria-hidden="true"></div>
+
+<script>
+  (function(){
+    const menuBtn = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function openSidebar(){ sidebar.classList.add('open'); overlay.classList.add('show'); }
+    function closeSidebar(){ sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+
+    if(menuBtn){
+      menuBtn.style.display = window.innerWidth <= 425 ? 'block' : 'none';
+      menuBtn.addEventListener('click', function(){
+        if(sidebar.classList.contains('open')) closeSidebar(); else openSidebar();
+      });
+    }
+
+    overlay.addEventListener('click', closeSidebar);
+    window.addEventListener('resize', ()=> {
+      if(window.innerWidth>425) closeSidebar();
+      if(menuBtn) menuBtn.style.display = window.innerWidth <= 425 ? 'block' : 'none';
+    });
+
+    // Example: action handlers (no external calls)
+    document.querySelectorAll('.action-btn').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        const title = btn.getAttribute('title') || 'action';
+        // small feedback (you can replace with real actions)
+        btn.animate([{transform:'translateY(-3px)'},{transform:'translateY(0)'}],{duration:160});
+        console.log('Action:', title, 'for card', btn.closest('.card')?.querySelector('.name')?.textContent?.trim());
+      });
+    });
+
+    // close overlay & sidebar on ESC
+    window.addEventListener('keydown', e => { if(e.key === 'Escape') closeSidebar(); });
+  })();
+</script>
+</body>
+</html>
